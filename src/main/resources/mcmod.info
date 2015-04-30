@@ -1,0 +1,16 @@
+[
+{
+  "modid": "feudal_functions",
+  "name": "Feudal Functions",
+  "description": "Major gameplay improvements galore!",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Rimevel"],
+  "credits": "All of the forge team cause you are awesome, coolAlias for his helpful tutorials.",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
