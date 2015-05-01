@@ -66,6 +66,8 @@ public class ModCore
 		ModBlock.buildAllBlocks();
 		ModItem.buildAllItems();
 		
+		UtilToolMaterials.setRepairMaterials();
+		
 		new GuiHandler();
 		
 		proxy.register();

@@ -1,11 +1,13 @@
 package se.rimevel.FeudalFunctions.core.tiles;
 
+import se.rimevel.FeudalFunctions.core.util.UtilLog;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraftforge.common.util.Constants;
 
@@ -63,6 +65,32 @@ public class TileEntityContainerBase extends TileEntityBase implements IInventor
 	}
 	
 	@Override
+	public Packet getDescriptionPacket()
+	{
+		NBTTagCompound compound = new NBTTagCompound();
+		writeSyncData(compound);
+		writeExtraData(compound);
+		
+		NBTTagList items = new NBTTagList();
+		
+		for (int i = 0; i < getSizeInventory(); i++)
+		{
+			ItemStack stack = getStackInSlot(i);
+			if(stack != null)
+			{
+				NBTTagCompound item = new NBTTagCompound();
+				item.setByte("Slot", (byte)i);
+				stack.writeToNBT(item);
+				items.appendTag(item);
+			}
+		}
+		
+		compound.setTag("Items", items);
+		
+		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, compound);
+	}
+	
+	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
 	{
 		readSyncData(pkt.func_148857_g());
@@ -79,6 +107,10 @@ public class TileEntityContainerBase extends TileEntityBase implements IInventor
 			{
 				setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(item));
 			}
+		}
+		if(worldObj.isRemote)
+		{
+			worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
 		}
 	}
 	

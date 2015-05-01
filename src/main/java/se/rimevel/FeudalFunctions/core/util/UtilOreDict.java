@@ -55,7 +55,28 @@ public class UtilOreDict
 	
 	public static boolean areItemsEqual(ItemStack firstStack, ItemStack secondStack)
 	{
+		if(firstStack == null || secondStack == null){return false;}
+		
 		int[] oreIdOne = OreDictionary.getOreIDs(firstStack);
+		int[] oreIdTwo = OreDictionary.getOreIDs(secondStack);
+		
+		if(oreIdOne != null && oreIdOne.length >= 1 && oreIdTwo != null && oreIdTwo.length >= 1)
+		{
+			for (int one : oreIdOne)
+			{
+				for (int two : oreIdTwo)
+				{
+					UtilLog.info("ONE: " + OreDictionary.getOreName(one));
+					UtilLog.info("TWO: " + OreDictionary.getOreName(two));
+					if(OreDictionary.getOreName(one) == OreDictionary.getOreName(two))
+					{
+						return true;
+					}
+				}
+			}
+		}
+		
+		/*int[] oreIdOne = OreDictionary.getOreIDs(firstStack);
 		int[] OreIdTwo = OreDictionary.getOreIDs(secondStack);
 		
 		for (int one : oreIdOne)
@@ -67,7 +88,7 @@ public class UtilOreDict
 					return true;
 				}
 			}
-		}
+		}*/
 		
 		return false;
 	}

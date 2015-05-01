@@ -11,15 +11,18 @@ public class TileEntityBase extends TileEntity
 	@Override
 	public Packet getDescriptionPacket()
 	{
-		NBTTagCompound syncData = new NBTTagCompound();
-		this.writeSyncData(syncData);
-		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, syncData);
+		NBTTagCompound compound = new NBTTagCompound();
+		this.writeSyncData(compound);
+		this.writeExtraData(compound);
+		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 1, compound);
 	}
 	
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
 	{
 		readSyncData(pkt.func_148857_g());
+		readExtraData(pkt.func_148857_g());
+		this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 	
 	protected void writeSyncData(NBTTagCompound compound)
