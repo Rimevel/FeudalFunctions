@@ -1,9 +1,12 @@
 package se.rimevel.FeudalFunctions.modules.smithing.items;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 import se.rimevel.FeudalFunctions.core.items.ItemBase;
+import se.rimevel.FeudalFunctions.core.util.UtilPlayer;
 import se.rimevel.FeudalFunctions.modules.smithing.MSmithing;
 import se.rimevel.FeudalFunctions.modules.smithing.util.DataHeatableList;
 import se.rimevel.FeudalFunctions.modules.smithing.util.EnumHeatableType;
@@ -42,6 +45,14 @@ public class ItemHeated extends ItemBase
 			return "Hot " + heatedItem.getDisplayName();
 		}
 		return "No Item! Something is wrong!";
+	}
+	
+	@Override
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+	{
+		ItemStack newStack = getHeatedItem(stack);
+		UtilPlayer.setHeldStack(player, getHeatedItem(newStack));
+		return newStack;
 	}
 	
 	/**

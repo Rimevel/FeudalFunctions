@@ -52,6 +52,8 @@ public class BlockForge extends BlockContainerBase
 	
 	public static void updateBlockMeta(boolean active, World world, int x, int y, int z)
 	{
+		isChangingState = true;
+		
 		TileEntity tileentity = world.getTileEntity(x, y, z);
 		if(active)
 		{
@@ -69,6 +71,8 @@ public class BlockForge extends BlockContainerBase
 			tileentity.validate();
 			world.setTileEntity(x, y, z, tileentity);
 		}
+		
+		isChangingState = false;
 	}
 	
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ)

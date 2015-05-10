@@ -50,6 +50,16 @@ public class UtilPlayer
 	}
 	
 	/**
+	 * Set the item the player is holding.
+	 * @param player The player instance.
+	 * @param newStack The new item to place in the players hand.
+	 */
+	public static void setHeldStack(EntityPlayer player, ItemStack newStack)
+	{
+		player.inventory.setInventorySlotContents(player.inventory.currentItem, newStack);
+	}
+	
+	/**
 	 * Move items from the target inventory to the players inventory. Either a whole stack or a certain amount.
 	 * @param player The player instance.
 	 * @param tile The target tile entity. Should have an inventory.

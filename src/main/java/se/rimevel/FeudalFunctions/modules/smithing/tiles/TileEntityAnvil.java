@@ -8,11 +8,18 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import se.rimevel.FeudalFunctions.core.tiles.TileEntityContainerBase;
 import se.rimevel.FeudalFunctions.core.util.UtilOreDict;
+import se.rimevel.FeudalFunctions.modules.smithing.crafting.recipes.RecipesAnvil;
 
 public class TileEntityAnvil extends TileEntityContainerBase
 {
 	public boolean slotsLocked;
-
+	
+	public ItemStack result;
+	public int progress;
+	
+	public boolean isRepair;
+	public int repairSlot;
+	
 	public TileEntityAnvil()
 	{
 		super(9);
@@ -24,34 +31,96 @@ public class TileEntityAnvil extends TileEntityContainerBase
 		
 		if(!slotsLocked)
 		{
-			int repairSlot = getPotentialWeaponRepair();
+			repairSlot = getPotentialWeaponRepair();
 			
 			if(repairSlot > -1)
 			{
-				doRepair(repairSlot);
+				slotsLocked = true;
+				isRepair = true;
+				progress++;
+				worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.anvil_land", 0.7F, 0.8F);
 				syncData();
+				return;
+			}
+			
+			ItemStack stack = RecipesAnvil.matchRecipe(this, worldObj);
+			if(stack != null)
+			{
+				slotsLocked = true;
+				result = stack;
+				isRepair = false;
+				progress++;
+				worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.anvil_land", 0.7F, 0.8F);
+				syncData();
+				return;
 			}
 		}
-	}
-	
-	@Override
-	public void updateEntity()
-	{
-		//worldObj.func_147479_m(xCoord, yCoord, zCoord);
+		else
+		{
+			if(progress <= 20)
+			{
+				progress++;
+				worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.anvil_land", 0.7F, 0.8F);
+				syncData();
+				return;
+			}
+			
+			if(progress > 20)
+			{
+				progress = 0;
+				slotsLocked = false;
+				if(isRepair)
+				{
+					doRepair(repairSlot);
+					this.repairSlot = -1;
+				}
+				else
+				{
+					doCrafting(player);
+					this.result = null;
+				}
+				worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.levelup", 0.7F, 0.8F);
+				syncData();
+				return;
+			}
+		}
 	}
 	
 	@Override
 	protected void writeSyncData(NBTTagCompound compound)
 	{
 		compound.setBoolean("Locked", this.slotsLocked);
+		compound.setInteger("Progress", this.progress);
 	}
 	
 	@Override
 	protected void readSyncData(NBTTagCompound compound)
 	{
 		this.slotsLocked = compound.getBoolean("Locked");
+		this.progress = compound.getInteger("Progress");
 	}
 	
+	/**
+	 * Craft the result item for the current grid.
+	 * @param player Player doing the crafting.
+	 */
+	private void doCrafting(EntityPlayer player)
+	{
+		if(result != null)
+		{
+			for (int i = 0; i < content.length; i++)
+			{
+				decrStackSize(i, 1);
+			}
+			
+			setInventorySlotContents(4, result);
+		}
+	}
+	
+	/**
+	 * Check if the items on the grid consist of only a tool and its material.
+	 * @return Returns the slot that contains the tool to be repaired. -1 if no valid repair recipe was found.
+	 */
 	private int getPotentialWeaponRepair()
 	{
 		int stackToRepair = -1;
@@ -99,6 +168,10 @@ public class TileEntityAnvil extends TileEntityContainerBase
 		return stackToRepair;
 	}
 	
+	/**
+	 * Do an actual repair on the tool in the given slot.
+	 * @param toolSlot Slot containing the tool to be repaired.
+	 */
 	private void doRepair(int toolSlot)
 	{
 		ItemStack repairedTool;

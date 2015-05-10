@@ -15,6 +15,9 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
 	/**
 	 * This class is a tile entity specific extension of BlockBase.
 	 */
+	
+	public static boolean isChangingState;
+	
 	public BlockContainerBase()
 	{
 		super();
@@ -48,12 +51,14 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
 		TileEntityContainerBase tile = (TileEntityContainerBase)world.getTileEntity(x, y, z);
 		if(tile != null)
 		{
-			dropStacks(world, x, y, z, meta, tile.content);
+			dropStacks(world, x, y, z, meta, tile.content, isChangingState);
 		}
 	}
 	
-	public static void dropStacks(World world, int x, int y, int z, int meta, ItemStack[] stacks)
+	public static void dropStacks(World world, int x, int y, int z, int meta, ItemStack[] stacks, boolean state)
 	{
+		if(state){return;}
+		
 		float f3 = 0.05F;		
 		
 	    Random rand = new Random();

@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.util.Constants;
 
 public class TileEntityContainerBase extends TileEntityBase implements IInventory
@@ -20,14 +21,12 @@ public class TileEntityContainerBase extends TileEntityBase implements IInventor
 		content = new ItemStack[contentSize];
 	}
 	
+	@Override
 	public void writeToNBT(NBTTagCompound compound)
 	{
 		super.writeToNBT(compound);
-		writeSyncData(compound);
-		writeExtraData(compound);
 		
 		NBTTagList items = new NBTTagList();
-		
 		for (int i = 0; i < getSizeInventory(); i++)
 		{
 			ItemStack stack = getStackInSlot(i);
@@ -39,19 +38,18 @@ public class TileEntityContainerBase extends TileEntityBase implements IInventor
 				items.appendTag(item);
 			}
 		}
-		
 		compound.setTag("Items", items);
+		
+		writeSyncData(compound);
+		writeExtraData(compound);
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound)
 	{
 		super.readFromNBT(compound);
-		readSyncData(compound);
-		readExtraData(compound);
 		
 		NBTTagList items = compound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
-		
 		for (int i = 0; i < items.tagCount(); i++)
 		{
 			NBTTagCompound item = (NBTTagCompound)items.getCompoundTagAt(i);
@@ -62,6 +60,9 @@ public class TileEntityContainerBase extends TileEntityBase implements IInventor
 				setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(item));
 			}
 		}
+		
+		readSyncData(compound);
+		readExtraData(compound);
 	}
 	
 	@Override
@@ -69,7 +70,6 @@ public class TileEntityContainerBase extends TileEntityBase implements IInventor
 	{
 		NBTTagCompound compound = new NBTTagCompound();
 		writeSyncData(compound);
-		writeExtraData(compound);
 		
 		NBTTagList items = new NBTTagList();
 		
@@ -93,10 +93,13 @@ public class TileEntityContainerBase extends TileEntityBase implements IInventor
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
 	{
-		readSyncData(pkt.func_148857_g());
-		readExtraData(pkt.func_148857_g());
+		NBTTagCompound compound = pkt.func_148857_g();
 		
-		NBTTagList items = pkt.func_148857_g().getTagList("Items", Constants.NBT.TAG_COMPOUND);
+		readSyncData(compound);
+		
+		NBTTagList items = compound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+		
+		this.content = new ItemStack[getSizeInventory()];
 		
 		for (int i = 0; i < items.tagCount(); i++)
 		{
@@ -108,10 +111,8 @@ public class TileEntityContainerBase extends TileEntityBase implements IInventor
 				setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(item));
 			}
 		}
-		if(worldObj.isRemote)
-		{
-			worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
-		}
+		this.worldObj.updateLightByType(EnumSkyBlock.Block, xCoord, yCoord, zCoord);
+		this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 	}
 	
 	@Override
@@ -140,7 +141,7 @@ public class TileEntityContainerBase extends TileEntityBase implements IInventor
 			else
 			{
 				itemstack = itemstack.splitStack(amount);
-				syncData();
+				//syncData();
 			}
 		}
 		
@@ -164,6 +165,7 @@ public class TileEntityContainerBase extends TileEntityBase implements IInventor
 		{
 			itemstack.stackSize = getInventoryStackLimit();
 		}
+		//this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import se.rimevel.FeudalFunctions.core.modules.MModule;
 import se.rimevel.FeudalFunctions.core.ui.GuiWrapper;
 import se.rimevel.FeudalFunctions.modules.smithing.blocks.SmithingBlocks;
+import se.rimevel.FeudalFunctions.modules.smithing.crafting.recipes.RecipesAnvil;
 import se.rimevel.FeudalFunctions.modules.smithing.items.SmithingItems;
 import se.rimevel.FeudalFunctions.modules.smithing.renderers.RenderAnvil;
 import se.rimevel.FeudalFunctions.modules.smithing.renderers.RenderCrucible;
@@ -50,6 +51,8 @@ public class MSmithing extends MModule
 		DataHeatableList.addItem("ingotIron", 60, EnumHeatableType.INGOT);
 		DataHeatableList.addItem("ingotGold", 40, EnumHeatableType.INGOT);
 		DataHeatableList.addItem("ingotSteel", 80, EnumHeatableType.INGOT);
+		
+		RecipesAnvil.addDefaultRecipes();
 	}
 	
 	@Override

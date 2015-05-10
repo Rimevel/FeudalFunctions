@@ -101,12 +101,11 @@ public class BlockAnvil extends BlockContainerBase
 		TileEntityAnvil tile = (TileEntityAnvil)world.getTileEntity(x, y, z);
 		ItemStack held = UtilPlayer.getHeldItem(player);
 		
+		if(world.isRemote){return true;}
+		
 		if(player.isSneaking())
 		{
-			if(!world.isRemote)
-			{
-				GuiHandler.openGui(player, 1, world, x, y, z);
-			}
+			GuiHandler.openGui(player, 1, world, x, y, z);
 		}
 		else
 		{
@@ -117,11 +116,13 @@ public class BlockAnvil extends BlockContainerBase
 			{
 				tile.setInventorySlotContents(slotHit, held.copy());
 				UtilPlayer.decrHeldStack(player, 1);
+				world.markBlockForUpdate(x, y, z);
 				return true;
 			}
 			else if(!UtilPlayer.isHoldingItem(player) && tile.slotHasItem(slotHit))
 			{
 				UtilPlayer.transferStackContainerToInventory(player, tile, slotHit, 0);
+				world.markBlockForUpdate(x, y, z);
 				return true;
 			}
 		}

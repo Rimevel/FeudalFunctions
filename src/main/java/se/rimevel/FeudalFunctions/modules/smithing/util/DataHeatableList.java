@@ -50,6 +50,7 @@ public class DataHeatableList
 		{
 			if(UtilOreDict.compareItem(stack, data.oreDictName))
 			{
+				UtilLog.info("TYPE:" + data.type.toString());
 				return data.type;
 			}
 		}
