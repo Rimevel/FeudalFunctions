@@ -7,14 +7,14 @@ import net.minecraftforge.oredict.OreDictionary;
 import se.rimevel.FeudalFunctions.core.util.UtilLog;
 import se.rimevel.FeudalFunctions.modules.smithing.items.ItemHeated;
 
-public class CraftingAnvil
+public class RecipeAnvil
 {
 	int recipeWidth, recipeHeight;
 	
-	public final CraftingHeatedStack[] recipeItems;
+	public final HeatedStack[] recipeItems;
 	public final ItemStack recipeOutput;
 	
-	public CraftingAnvil(int width, int height, CraftingHeatedStack[] recipeArray, ItemStack recipeOutput)
+	public RecipeAnvil(int width, int height, HeatedStack[] recipeArray, ItemStack recipeOutput)
 	{
 		this.recipeWidth = width;
 		this.recipeHeight = height;
@@ -56,7 +56,7 @@ public class CraftingAnvil
 			{
 				int xPos = width - x;
 				int yPos = height - y;
-				CraftingHeatedStack stack = null;
+				HeatedStack stack = null;
 
 				if (xPos >= 0 && yPos >= 0 && xPos < this.recipeWidth && yPos < this.recipeHeight)
 				{

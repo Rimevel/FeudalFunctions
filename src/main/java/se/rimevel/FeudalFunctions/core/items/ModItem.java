@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
 import se.rimevel.FeudalFunctions.core.util.UtilToolMaterials;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -98,6 +100,22 @@ public class ModItem<T extends Item>
 					Constructor<?> cl = this.itemClass.getConstructor(float.class, ToolMaterial.class, String.class);
 					Object object = cl.newInstance(this.damage, this.material.getMaterial(), this.repairMaterial);
 					this.instance = (ItemToolBase) object;
+					this.instance.setUnlocalizedName(this.name);
+				}
+				catch (InvocationTargetException e)
+				{
+					e.getTargetException();
+				}
+			}
+			else if(this.itemClass.getSuperclass().getSuperclass() == Item.class ||
+					this.itemClass.getSuperclass().getSuperclass().getSuperclass() == Item.class
+					)
+			{
+				try
+				{
+					Constructor<?> cl = this.itemClass.getConstructor(float.class, ToolMaterial.class, String.class);
+					Object object = cl.newInstance(this.damage, this.material.getMaterial(), this.repairMaterial);
+					this.instance = (Item) object;
 					this.instance.setUnlocalizedName(this.name);
 				}
 				catch (InvocationTargetException e)

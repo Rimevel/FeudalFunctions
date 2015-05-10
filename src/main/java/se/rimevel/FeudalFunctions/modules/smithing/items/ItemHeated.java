@@ -1,6 +1,13 @@
 package se.rimevel.FeudalFunctions.modules.smithing.items;
 
+import java.util.List;
+import java.util.Random;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
@@ -21,20 +28,29 @@ public class ItemHeated extends ItemBase
 		setNoRepair();
 		setMaxStackSize(1);
 		setNoTexture(false);
+		setHasSubtypes(true);
 	}
 	
-	@Override
+	public void getSubItems(Item item, CreativeTabs tabs, List list)
+	{
+		for (int i = 0; i < names.length; i++)
+		{
+			list.add(new ItemStack(item, 1, i));
+		}
+	}
+	
+	/*@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconIndex(ItemStack stack)
 	{
 		ItemStack heatedItem = getHeatedItem(stack);
 		if(heatedItem != null)
 		{
-			IIcon icon = getTexture(getType(stack));
+			IIcon icon = getIconFromDamage(getType(stack));
 			return icon;
 		}
 		return null;
-	}
+	}*/
 	
 	@Override
 	public String getItemStackDisplayName(ItemStack stack)
@@ -77,7 +93,7 @@ public class ItemHeated extends ItemBase
 	{
 		if(DataHeatableList.getItemHeatTime(heatedItem) > 0)
 		{
-			ItemStack output = new ItemStack(MSmithing.items.heated_item.getInstance(), 1);
+			ItemStack output = new ItemStack(MSmithing.items.heated_item.getInstance(), 1, DataHeatableList.getType(heatedItem).ordinal());
 			if(!output.hasTagCompound())
 			{
 				output.stackTagCompound = new NBTTagCompound();
@@ -123,6 +139,48 @@ public class ItemHeated extends ItemBase
 		}
 		
 		return null;
+	}
+	
+	@Override
+	public boolean onEntityItemUpdate(EntityItem entityItem)
+	{
+		if(entityItem.worldObj.getWorldTime() % 20 == 0)
+		{
+			int x, y, z;
+			
+			x = (int)Math.floor(entityItem.posX);
+			y = (int)Math.floor(entityItem.posY);
+			z = (int)Math.floor(entityItem.posZ);
+			
+			Random random = new Random();
+			
+			if(entityItem.worldObj.getBlock(x, y, z) == Blocks.water || entityItem.worldObj.getBlock(x, y, z) == Blocks.flowing_water)
+			{
+				if(isHeatedItem(entityItem.getEntityItem()))
+				{
+					ItemStack coolingItem = ItemHeated.removeHeat(entityItem.getEntityItem());
+					if(coolingItem != null)
+					{
+						if(!entityItem.worldObj.isRemote)
+						{
+							coolingItem.stackSize = 1;
+							entityItem.setEntityItemStack(coolingItem.copy());
+							entityItem.playSound("random.fizz", 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F);
+						}
+					}
+					
+					if(entityItem.worldObj.isRemote)
+					{
+						for (int i = 0; i < 8; i++)
+						{
+							entityItem.worldObj.spawnParticle("largesmoke", (double)(x + 0.2F + (random.nextFloat() / 2)), (double)(y + 1.5F + (random.nextFloat() / 4)), (double)(z + 0.2F + (random.nextFloat() / 2)), 0.0D, 0.1D, 0.0D);
+						}
+					}
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	public static boolean isHeatedItem(ItemStack stack)

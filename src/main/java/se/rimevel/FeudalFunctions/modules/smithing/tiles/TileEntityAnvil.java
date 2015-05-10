@@ -8,7 +8,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import se.rimevel.FeudalFunctions.core.tiles.TileEntityContainerBase;
 import se.rimevel.FeudalFunctions.core.util.UtilOreDict;
-import se.rimevel.FeudalFunctions.modules.smithing.crafting.recipes.RecipesAnvil;
+import se.rimevel.FeudalFunctions.modules.smithing.crafting.recipes.RecipeListAnvil;
 
 public class TileEntityAnvil extends TileEntityContainerBase
 {
@@ -43,7 +43,7 @@ public class TileEntityAnvil extends TileEntityContainerBase
 				return;
 			}
 			
-			ItemStack stack = RecipesAnvil.matchRecipe(this, worldObj);
+			ItemStack stack = RecipeListAnvil.matchRecipe(this, worldObj);
 			if(stack != null)
 			{
 				slotsLocked = true;

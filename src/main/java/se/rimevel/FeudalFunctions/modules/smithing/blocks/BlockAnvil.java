@@ -101,11 +101,12 @@ public class BlockAnvil extends BlockContainerBase
 		TileEntityAnvil tile = (TileEntityAnvil)world.getTileEntity(x, y, z);
 		ItemStack held = UtilPlayer.getHeldItem(player);
 		
-		if(world.isRemote){return true;}
-		
 		if(player.isSneaking())
 		{
-			GuiHandler.openGui(player, 1, world, x, y, z);
+			if(!world.isRemote)
+			{
+				GuiHandler.openGui(player, 1, world, x, y, z);
+			}
 		}
 		else
 		{

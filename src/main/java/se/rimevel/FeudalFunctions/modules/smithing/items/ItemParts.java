@@ -34,11 +34,11 @@ public class ItemParts extends ItemBase
 		switch (type)
 		{
 			case AXE_HEAD: return new ItemStack(this, 1, 0);
-			case PICKAXE_HEAD: return new ItemStack(this, 1, 0);
-			case HOE_HEAD: return new ItemStack(this, 1, 0);
-			case SHOVEL_HEAD: return new ItemStack(this, 1, 0);
-			case SWORD_BLADE: return new ItemStack(this, 1, 0);
-			case HAMMER_HEAD: return new ItemStack(this, 1, 0);
+			case PICKAXE_HEAD: return new ItemStack(this, 1, 1);
+			case HOE_HEAD: return new ItemStack(this, 1, 2);
+			case SHOVEL_HEAD: return new ItemStack(this, 1, 3);
+			case SWORD_BLADE: return new ItemStack(this, 1, 4);
+			case HAMMER_HEAD: return new ItemStack(this, 1, 5);
 			default: return new ItemStack(this, 1, 0);
 		}
 	}
