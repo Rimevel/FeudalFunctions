@@ -31,7 +31,7 @@ public enum UtilToolMaterials
 	{
 		STONE.material = Item.ToolMaterial.STONE;
 		COPPER.material = EnumHelper.addToolMaterial("COPPER", 0, 80, 4.0F, 1.0F, 5);
-		TIN.material = EnumHelper.addToolMaterial("TIN", 0, 70, 4.0F, 1.0F, 15);
+		TIN.material = EnumHelper.addToolMaterial("TIN", 0, 40, 4.0F, 1.0F, 15);
 		BRONZE.material = EnumHelper.addToolMaterial("BRONZE", 1, 150, 4.0F, 2.0F, 10);
 		IRON.material = Item.ToolMaterial.IRON;
 		GOLD.material = Item.ToolMaterial.GOLD;

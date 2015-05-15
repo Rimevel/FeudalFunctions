@@ -46,15 +46,6 @@ public class BlockContainerBase extends BlockBase implements ITileEntityProvider
 		return null;
 	}
 	
-	public void onBlockPreDestroy(World world, int x, int y, int z, int meta)
-	{
-		TileEntityContainerBase tile = (TileEntityContainerBase)world.getTileEntity(x, y, z);
-		if(tile != null)
-		{
-			dropStacks(world, x, y, z, meta, tile.content, isChangingState);
-		}
-	}
-	
 	public static void dropStacks(World world, int x, int y, int z, int meta, ItemStack[] stacks, boolean state)
 	{
 		if(state){return;}

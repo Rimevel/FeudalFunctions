@@ -18,7 +18,7 @@ public class ItemBlockBase extends ItemBlockWithMetadata
 	@Override
 	public String getUnlocalizedName(ItemStack stack)
 	{
-		return String.format("tile.%s%s", ModSettings.ID.toLowerCase() + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()) + "." + subnames[stack.getItemDamage()]);
+		return String.format("item.%s%s", ModSettings.TEXTURE_LOCATION, getUnwrappedUnlocalizedName(super.getUnlocalizedName()) + "." + subnames[stack.getItemDamage()]);
 	}
 	
 	public void setSubnames(String ... names)

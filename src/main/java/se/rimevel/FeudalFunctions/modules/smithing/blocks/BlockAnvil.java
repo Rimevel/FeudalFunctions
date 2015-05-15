@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import scala.actors.threadpool.Arrays;
 import se.rimevel.FeudalFunctions.core.blocks.BlockContainerBase;
+import se.rimevel.FeudalFunctions.core.tiles.TileEntityContainerBase;
 import se.rimevel.FeudalFunctions.core.ui.GuiHandler;
 import se.rimevel.FeudalFunctions.core.util.UtilEntity;
 import se.rimevel.FeudalFunctions.core.util.UtilPlayer;
@@ -129,6 +130,15 @@ public class BlockAnvil extends BlockContainerBase
 		}
 		
 		return false;
+	}
+	
+	public void onBlockPreDestroy(World world, int x, int y, int z, int meta)
+	{
+			TileEntityContainerBase tile = (TileEntityContainerBase)world.getTileEntity(x, y, z);
+			if(tile != null)
+			{
+				dropStacks(world, x, y, z, meta, tile.content, isChangingState);
+			}
 	}
 	
 	public int calculateSlotFromHit(float hitX, float hitY, float hitZ, int meta)
