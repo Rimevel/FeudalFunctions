@@ -92,4 +92,20 @@ public class UtilOreDict
 		
 		return false;
 	}
+	
+	public static String getOreName(ItemStack stack)
+	{
+		int[] oreId = OreDictionary.getOreIDs(stack);
+		
+		if(oreId != null && oreId.length >= 1)
+		{
+			for (int ore : oreId)
+			{
+				return OreDictionary.getOreName(ore);
+			}
+			
+		}
+		
+		return null;
+	}
 }

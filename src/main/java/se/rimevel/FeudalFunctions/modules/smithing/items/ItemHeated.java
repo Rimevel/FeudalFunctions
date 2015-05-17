@@ -63,14 +63,6 @@ public class ItemHeated extends ItemBase
 		return "No Item! Something is wrong!";
 	}
 	
-	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
-	{
-		ItemStack newStack = getHeatedItem(stack);
-		UtilPlayer.setHeldStack(player, getHeatedItem(newStack));
-		return newStack;
-	}
-	
 	/**
 	 * Get the item contained within the ItemHeated wrapper class. ONLY HEATED ITEMS!
 	 * @param stack

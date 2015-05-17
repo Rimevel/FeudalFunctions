@@ -4,11 +4,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import se.rimevel.FeudalFunctions.core.blocks.BlockContainerBase;
 import se.rimevel.FeudalFunctions.core.tiles.TileEntityContainerBase;
-import se.rimevel.FeudalFunctions.core.util.UtilOreDict;
+import se.rimevel.FeudalFunctions.core.util.UtilLog;
 import se.rimevel.FeudalFunctions.modules.smithing.crafting.recipes.RecipeListAnvil;
+import se.rimevel.FeudalFunctions.modules.smithing.items.ItemBloom;
+import se.rimevel.FeudalFunctions.modules.smithing.util.DataBloomType;
 
 public class TileEntityAnvil extends TileEntityContainerBase
 {
@@ -19,6 +20,9 @@ public class TileEntityAnvil extends TileEntityContainerBase
 	
 	public boolean isRepair;
 	public int repairSlot;
+	
+	public boolean isBloom;
+	public int bloomSlot;
 	
 	public TileEntityAnvil()
 	{
@@ -32,11 +36,24 @@ public class TileEntityAnvil extends TileEntityContainerBase
 		if(!slotsLocked)
 		{
 			repairSlot = getPotentialWeaponRepair();
+			bloomSlot = getPotentialBloomRefining();
 			
 			if(repairSlot > -1)
 			{
 				slotsLocked = true;
 				isRepair = true;
+				isBloom = false;
+				progress++;
+				worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.anvil_land", 0.7F, 0.8F);
+				syncData();
+				return;
+			}
+			
+			if(bloomSlot > -1)
+			{
+				slotsLocked = true;
+				isRepair = false;
+				isBloom = true;
 				progress++;
 				worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.anvil_land", 0.7F, 0.8F);
 				syncData();
@@ -49,6 +66,7 @@ public class TileEntityAnvil extends TileEntityContainerBase
 				slotsLocked = true;
 				result = stack;
 				isRepair = false;
+				isBloom = false;
 				progress++;
 				worldObj.playSoundEffect(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D, "random.anvil_land", 0.7F, 0.8F);
 				syncData();
@@ -74,6 +92,11 @@ public class TileEntityAnvil extends TileEntityContainerBase
 					doRepair(repairSlot);
 					this.repairSlot = -1;
 				}
+				else if(isBloom)
+				{
+					doBloomOperation(bloomSlot);
+					this.bloomSlot = -1;
+				}
 				else
 				{
 					doCrafting(player);
@@ -85,7 +108,7 @@ public class TileEntityAnvil extends TileEntityContainerBase
 			}
 		}
 	}
-	
+
 	@Override
 	protected void writeSyncData(NBTTagCompound compound)
 	{
@@ -114,6 +137,60 @@ public class TileEntityAnvil extends TileEntityContainerBase
 			}
 			
 			setInventorySlotContents(4, result);
+		}
+	}
+	
+	/**
+	 * Do an actual repair on the tool in the given slot.
+	 * @param toolSlot Slot containing the tool to be repaired.
+	 */
+	private void doRepair(int toolSlot)
+	{
+		ItemStack repairedTool;
+		
+		if(getStackInSlot(toolSlot).getItem() instanceof ItemTool)
+		{
+			repairedTool = getStackInSlot(toolSlot).copy();
+			repairedTool.setItemDamage(0);
+			
+			for (int i = 0; i < getSizeInventory(); i++)
+			{
+				if(getStackInSlot(i) != null)
+				{
+					decrStackSize(i, 1);
+				}
+			}
+			
+			setInventorySlotContents(4, repairedTool);
+		}
+	}
+	
+	/**
+	 * Refine the bloom in the given slot.
+	 * @param bloomSlot
+	 */
+	private void doBloomOperation(int bloomSlot)
+	{
+		ItemStack bloomStack = getStackInSlot(bloomSlot);
+		
+		if(bloomStack != null && bloomStack.getItem() instanceof ItemBloom)
+		{
+			DataBloomType data = ItemBloom.getBloomData(bloomStack);
+			
+			if(data.amount >= 1000)
+			{
+				ItemStack result = ItemBloom.getBloomData(bloomStack).result.copy();
+				
+				for (int i = 0; i < getSizeInventory(); i++)
+				{
+					if(getStackInSlot(i) != null)
+					{
+						decrStackSize(i, 1);
+					}
+				}
+				
+				setInventorySlotContents(4, result);
+			}
 		}
 	}
 	
@@ -169,28 +246,29 @@ public class TileEntityAnvil extends TileEntityContainerBase
 	}
 	
 	/**
-	 * Do an actual repair on the tool in the given slot.
-	 * @param toolSlot Slot containing the tool to be repaired.
+	 * Check if the items on the grid consist of only one bloom and nothing else.
+	 * @return Returns the slot containing the bloom if found. Otherwise -1;
 	 */
-	private void doRepair(int toolSlot)
+	private int getPotentialBloomRefining()
 	{
-		ItemStack repairedTool;
+		int bloomStackSlot = -1;
 		
-		if(getStackInSlot(toolSlot).getItem() instanceof ItemTool)
+		for (int i = 0; i < getSizeInventory(); i++)
 		{
-			repairedTool = getStackInSlot(toolSlot).copy();
-			repairedTool.setItemDamage(0);
-			
-			for (int i = 0; i < getSizeInventory(); i++)
+			if(getStackInSlot(i) != null && getStackInSlot(i).getItem() instanceof ItemBloom)
 			{
-				if(getStackInSlot(i) != null)
-				{
-					decrStackSize(i, 1);
-				}
+				bloomStackSlot = i;
 			}
-			
-			setInventorySlotContents(4, repairedTool);
 		}
+		
+		for(int i = 0; i < getSizeInventory(); i++)
+		{
+			if(i == bloomStackSlot){continue;}
+			
+			if(getStackInSlot(i) != null){return -1;}
+		}
+		
+		return bloomStackSlot;
 	}
 	
 	@Override

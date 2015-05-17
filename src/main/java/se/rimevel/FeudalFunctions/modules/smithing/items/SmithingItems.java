@@ -14,6 +14,8 @@ public class SmithingItems
 {
 	public final static ModItem<ItemIngot> ingot = new ModItem<ItemIngot>("ingot", ItemIngot.class);
 	public final static ModItem<ItemHeated> heated_item = new ModItem<ItemHeated>("heated", ItemHeated.class);
+	public final static ModItem<ItemBloom> bloom = new ModItem<ItemBloom>("bloom", ItemBloom.class); 
+	
 	public final static ModItem<ItemParts> parts_copper = new ModItem<ItemParts>("parts_copper", ItemParts.class);
 	public final static ModItem<ItemParts> parts_bronze = new ModItem<ItemParts>("parts_bronze", ItemParts.class);
 	public final static ModItem<ItemParts> parts_iron = new ModItem<ItemParts>("parts_iron", ItemParts.class);
