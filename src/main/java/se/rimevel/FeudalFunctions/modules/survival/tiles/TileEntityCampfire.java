@@ -1,16 +1,23 @@
 package se.rimevel.FeudalFunctions.modules.survival.tiles;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import se.rimevel.FeudalFunctions.core.tiles.TileEntityBase;
 import se.rimevel.FeudalFunctions.core.tiles.TileEntityContainerBase;
 import se.rimevel.FeudalFunctions.core.util.UtilLog;
 import se.rimevel.FeudalFunctions.modules.survival.blocks.BlockCampfire;
+import se.rimevel.FeudalFunctions.modules.survival.crafting.RecipeCampfire;
+import se.rimevel.FeudalFunctions.modules.survival.crafting.recipes.RecipeListCampfire;
 
 public class TileEntityCampfire extends TileEntityContainerBase
 {
-	private int fuel, counter;
+	private int fuel, counter, timer;
 	private boolean active;
-
+	private RecipeCampfire recipe;
+	
+	public float rotation;
+	
 	/**
 	 * Maximum possible amount of fuel in the campfire at the same time.
 	 */
@@ -18,7 +25,7 @@ public class TileEntityCampfire extends TileEntityContainerBase
 	
 	public TileEntityCampfire()
 	{
-		super(2);
+		super(1);
 		fuel = 0;
 		active = false;
 	}
@@ -26,33 +33,65 @@ public class TileEntityCampfire extends TileEntityContainerBase
 	@Override
 	public void updateEntity()
 	{
-		if(worldObj.isRemote){return;}
+		if(worldObj.isRemote)
+		{
+			rotation += 2.5F;
+			if(rotation >= 360F)
+			{
+				rotation = 0F;
+			}
+		}
+		else
 		{
 			if(active)
 			{
-				if(counter <= 0)
+				if(counter >= 20)
 				{
 					if(worldObj.canBlockSeeTheSky(xCoord, yCoord, zCoord) && worldObj.isRaining())
 					{
-						fuel -= 2;
+						fuel -= 4;
 					}
 					else
 					{
 						fuel -= 1;
 					}
 					
-					counter = 20;
+					if(getStackInSlot(0) != null && recipe == null)
+					{
+						for (RecipeCampfire r : RecipeListCampfire.getRecipeList())
+						{
+							if(r.checkMatch(getStackInSlot(0)))
+							{
+								this.recipe = r;
+								break;
+							}
+						}
+					}
+					else if(getStackInSlot(0) != null && recipe != null)
+					{
+						timer += 1;
+						if(timer >= recipe.time)
+						{
+							setInventorySlotContents(0, recipe.result.copy());
+							timer = 0;
+							recipe = null;
+						}
+					}
+					
+					counter = 0;
 				}
 				else
 				{
-					counter--;
+					counter++;
 				}
 				
-				if(fuel <= 0)
+				if(!hasFuel())
 				{
 					fuel = 0;
 					setActive(false);
 				}
+				
+				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			}
 		}
 	}
@@ -86,11 +125,29 @@ public class TileEntityCampfire extends TileEntityContainerBase
 		}
 	}
 	
+	public boolean hasFuel()
+	{
+		if(fuel > 0)
+		{
+			return true;
+		}
+		
+		return false;
+	}
+
+	private boolean isValidFuel(ItemStack stack)
+	{
+		if(stack != null && stack.getItem() == Items.stick){return true;}
+		
+		return false;
+	}
+	
 	@Override
 	protected void readSyncData(NBTTagCompound compound)
 	{
 		this.fuel = compound.getShort("fuel");
 		this.active = compound.getBoolean("active");
+		this.timer = compound.getShort("timer");
 	}
 	
 	@Override
@@ -98,5 +155,17 @@ public class TileEntityCampfire extends TileEntityContainerBase
 	{
 		compound.setShort("fuel", (short)this.fuel);
 		compound.setBoolean("active", this.active);
+		compound.setShort("timer", (short)this.timer);
+	}
+	
+	@Override
+	public int getInventoryStackLimit()
+	{
+		return 1;
+	}
+
+	public ItemStack getItem()
+	{
+		return getStackInSlot(0);
 	}
 }

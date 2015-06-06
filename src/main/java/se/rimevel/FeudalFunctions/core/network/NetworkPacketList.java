@@ -4,12 +4,15 @@ import se.rimevel.FeudalFunctions.core.network.packets.PacketAccessGui;
 import se.rimevel.FeudalFunctions.core.network.packets.PacketCustomTileData;
 import se.rimevel.FeudalFunctions.core.network.packets.PacketAccessGui.PacketAccessGuiHandler;
 import se.rimevel.FeudalFunctions.core.network.packets.PacketCustomTileData.PacketCustomTileDataHandler;
+import se.rimevel.FeudalFunctions.modules.survival.network.packets.PacketPlayerStats;
+import se.rimevel.FeudalFunctions.modules.survival.network.packets.PacketPlayerStats.PacketPlayerStatsHandler;
 import cpw.mods.fml.relauncher.Side;
 
 public enum NetworkPacketList
 {
 	ACCESS_GUI(PacketAccessGuiHandler.class, PacketAccessGui.class, Side.SERVER),
-	CUSTOM_TILE_DATA(PacketCustomTileDataHandler.class, PacketCustomTileData.class, Side.CLIENT);
+	CUSTOM_TILE_DATA(PacketCustomTileDataHandler.class, PacketCustomTileData.class, Side.CLIENT),
+	PLAYER_STATS(PacketPlayerStatsHandler.class, PacketPlayerStats.class, Side.CLIENT);
 	
 	public final Class<?> HANDLER;
 	public final Class<?> PACKET;

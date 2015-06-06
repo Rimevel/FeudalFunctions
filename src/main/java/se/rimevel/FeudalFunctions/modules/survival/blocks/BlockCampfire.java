@@ -18,9 +18,10 @@ import se.rimevel.FeudalFunctions.core.util.UtilLog;
 import se.rimevel.FeudalFunctions.core.util.UtilOreDict;
 import se.rimevel.FeudalFunctions.core.util.UtilPlayer;
 import se.rimevel.FeudalFunctions.modules.survival.MSurvival;
+import se.rimevel.FeudalFunctions.modules.survival.interfaces.ITemperatureModifier;
 import se.rimevel.FeudalFunctions.modules.survival.tiles.TileEntityCampfire;
 
-public class BlockCampfire extends BlockContainerBase
+public class BlockCampfire extends BlockContainerBase implements ITemperatureModifier
 {
 	private static int instanceNumber;
 	
@@ -77,21 +78,33 @@ public class BlockCampfire extends BlockContainerBase
 		
 		if(UtilPlayer.isHoldingItem(player) && !player.isSneaking())
 		{
-			if(world.isRemote){return false;}
-			
 			if(getFuelValue(held) > 0)
 			{
 				if(tile.addFuel(getFuelValue(held)))
 				{
 					UtilPlayer.decrHeldStack(player, 1);
-					return true;
 				}
+				return true;
 			}
 			
 			if(held.getItem() == Items.flint_and_steel)
 			{
 				tile.setActive(true);
+				return true;
 			}
+			
+			if(tile.getStackInSlot(0) == null)
+			{
+				tile.setInventorySlotContents(0, UtilPlayer.getHeldItem(player).copy());
+				UtilPlayer.decrHeldStack(player, 1);
+				world.markBlockForUpdate(x, y, z);
+				return true;
+			}
+		}
+		else if(!UtilPlayer.isHoldingItem(player) && !player.isSneaking())
+		{
+			UtilPlayer.transferStackContainerToInventory(player, tile, 0, 1);
+			world.markBlockForUpdate(x, y, z);
 		}
 		
 		return false;
@@ -143,5 +156,15 @@ public class BlockCampfire extends BlockContainerBase
 	            world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), "fire.fire", 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
 	        }
 		}
+	}
+
+	@Override
+	public int getTempMod()
+	{
+		if(this.lightValue > 0)
+		{
+			return 2;
+		}
+		return 0;
 	}
 }

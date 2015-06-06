@@ -1,5 +1,7 @@
 package se.rimevel.FeudalFunctions.core.util;
 
+import java.util.UUID;
+
 import se.rimevel.FeudalFunctions.core.tiles.TileEntityContainerBase;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -162,6 +164,11 @@ public class UtilPlayer
 		return false;
 	}
 	
+	/**
+	 * Remove any itemStack in target slot on target player.
+	 * @param player Player to remove the stack from.
+	 * @param slot Slot to target.
+	 */
 	public static void emptySlot(EntityPlayer player, int slot)
 	{
 		player.inventory.decrStackSize(slot, player.inventory.getInventoryStackLimit());
@@ -222,5 +229,15 @@ public class UtilPlayer
 			return world.getBlock(pos.blockX, pos.blockY, pos.blockZ);
 		}
 		return null;
+	}
+	
+	public static UUID getPlayerId(EntityPlayer player)
+	{
+		return player.getUniqueID();
+	}
+	
+	public static ItemStack[] getArmorArray(EntityPlayer player)
+	{
+		return player.inventory.armorInventory;
 	}
 }

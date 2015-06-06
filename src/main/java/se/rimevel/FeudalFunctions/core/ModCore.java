@@ -2,12 +2,15 @@ package se.rimevel.FeudalFunctions.core;
 
 import java.lang.reflect.InvocationTargetException;
 
+import net.minecraft.network.NetworkStatistics.PacketStat;
 import se.rimevel.FeudalFunctions.core.blocks.ModBlock;
 import se.rimevel.FeudalFunctions.core.config.ConfigHandler;
 import se.rimevel.FeudalFunctions.core.items.ModItem;
 import se.rimevel.FeudalFunctions.core.keys.KeyHandler;
+import se.rimevel.FeudalFunctions.core.network.NetworkPacketSender;
 import se.rimevel.FeudalFunctions.core.proxies.CommonProxy;
 import se.rimevel.FeudalFunctions.core.ui.GuiHandler;
+import se.rimevel.FeudalFunctions.core.util.UtilArmorMaterials;
 import se.rimevel.FeudalFunctions.core.util.UtilToolMaterials;
 import se.rimevel.FeudalFunctions.modules.Modules;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -56,7 +59,9 @@ public class ModCore
 		//Check the config for values to use.
 		FMLCommonHandler.instance().bus().register(config);
 		
+		NetworkPacketSender.registerPackets();
 		UtilToolMaterials.init();
+		UtilArmorMaterials.init();
 		
 		for (Modules m : Modules.values())
 		{

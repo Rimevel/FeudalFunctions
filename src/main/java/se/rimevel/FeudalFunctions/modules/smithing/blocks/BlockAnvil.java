@@ -20,8 +20,9 @@ import se.rimevel.FeudalFunctions.core.util.UtilEntity;
 import se.rimevel.FeudalFunctions.core.util.UtilPlayer;
 import se.rimevel.FeudalFunctions.modules.smithing.items.tools.ItemToolHammer;
 import se.rimevel.FeudalFunctions.modules.smithing.tiles.TileEntityAnvil;
+import se.rimevel.FeudalFunctions.modules.survival.interfaces.ITemperatureModifier;
 
-public class BlockAnvil extends BlockContainerBase
+public class BlockAnvil extends BlockContainerBase implements ITemperatureModifier
 {
 	public BlockAnvil()
 	{
@@ -192,5 +193,15 @@ public class BlockAnvil extends BlockContainerBase
 		if(rotation == 3){return east[slot];}
 		
 		return -1;
+	}
+	
+	@Override
+	public int getTempMod()
+	{
+		if(this.lightValue > 0)
+		{
+			return 2;
+		}
+		return 0;
 	}
 }

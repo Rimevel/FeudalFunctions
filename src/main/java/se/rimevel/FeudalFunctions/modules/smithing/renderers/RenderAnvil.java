@@ -47,7 +47,7 @@ private ModelAnvil model;
 		
 		GL11.glPopMatrix();
 		
-int currentSlot = 0;
+		int currentSlot = 0;
 		
 		for (int gridZ = 2; gridZ >= 0; gridZ--)
 		{

@@ -20,11 +20,12 @@ import se.rimevel.FeudalFunctions.core.util.UtilMath;
 import se.rimevel.FeudalFunctions.core.util.UtilPlayer;
 import se.rimevel.FeudalFunctions.modules.smithing.MSmithing;
 import se.rimevel.FeudalFunctions.modules.smithing.tiles.TileEntityBloomery;
+import se.rimevel.FeudalFunctions.modules.survival.interfaces.ITemperatureModifier;
 import se.rimevel.FeudalFunctions.modules.survival.util.IFireTool;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockBloomery extends BlockContainerBase
+public class BlockBloomery extends BlockContainerBase implements ITemperatureModifier
 {
 	static int instanceNumber;
 	
@@ -160,5 +161,15 @@ public class BlockBloomery extends BlockContainerBase
 	            world.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), "fire.fire", 1.0F + random.nextFloat(), random.nextFloat() * 0.7F + 0.3F, false);
 	        }
 		}
+	}
+	
+	@Override
+	public int getTempMod()
+	{
+		if(this.lightValue > 0)
+		{
+			return 2;
+		}
+		return 0;
 	}
 }

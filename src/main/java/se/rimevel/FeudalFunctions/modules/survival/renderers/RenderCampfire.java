@@ -1,7 +1,11 @@
 package se.rimevel.FeudalFunctions.modules.survival.renderers;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -40,6 +44,55 @@ public class RenderCampfire extends TileEntitySpecialRenderer implements IItemRe
 		model.render(0.0625F, true);
 		
 		GL11.glPopMatrix();
+		
+		//--Item--
+		
+		//Item to be rendered.
+		ItemStack stack = tile.getItem();
+		
+		if(stack != null)
+		{
+			GL11.glPushMatrix();
+			
+			//Entity representing the itemStack.
+			EntityItem item = new EntityItem(tile.getWorldObj(), 0D, 0D, 0D, stack);
+			
+			item.hoverStart = 0F;
+			RenderItem.renderInFrame = true;
+			
+			GL11.glTranslatef(rVec.x + 0.5F, rVec.y + 0.300F, rVec.z + 0.5F);
+			
+			if(!(stack.getItem() instanceof ItemBlock))
+			{
+				GL11.glTranslatef(0F, 0.01F, 0F);
+			}
+			
+			GL11.glRotatef(180F, 0F, 0F, 1F);
+			
+			if(stack.getItem() instanceof ItemBlock)
+			{
+				GL11.glRotatef(180F, 0F, 0F, 1F);
+				//GL11.glRotatef(90F, 1F, 0F, 0F);
+				GL11.glTranslatef(0F, 0.4F, 0F);
+			}
+			else
+			{
+				GL11.glTranslatef(0F, -0.15F, 0F);
+			}
+			
+			GL11.glRotatef(180F, 0F, 0F, 1F);
+			
+			//Rotation
+			GL11.glRotatef(tile.rotation, 0F, 1F, 0F);
+			
+			GL11.glScalef(0.90F, 0.90F, 0.90F);
+			
+			RenderManager.instance.renderEntityWithPosYaw(item, 0D, 0D, 0D, 0.0F, 0.0F);
+			
+			RenderItem.renderInFrame = false;
+			
+			GL11.glPopMatrix();
+		}
 	}
 
 	@Override
