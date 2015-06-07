@@ -8,6 +8,7 @@ import se.rimevel.FeudalFunctions.core.config.ConfigHandler;
 import se.rimevel.FeudalFunctions.core.items.ModItem;
 import se.rimevel.FeudalFunctions.core.keys.KeyHandler;
 import se.rimevel.FeudalFunctions.core.network.NetworkPacketSender;
+import se.rimevel.FeudalFunctions.core.potions.PotionHandler;
 import se.rimevel.FeudalFunctions.core.proxies.CommonProxy;
 import se.rimevel.FeudalFunctions.core.ui.GuiHandler;
 import se.rimevel.FeudalFunctions.core.util.UtilArmorMaterials;
@@ -62,6 +63,13 @@ public class ModCore
 		NetworkPacketSender.registerPackets();
 		UtilToolMaterials.init();
 		UtilArmorMaterials.init();
+		
+		for (Modules m : Modules.values())
+		{
+			PotionHandler.getInstance().increaseCustomIdCount(m.getModule().customPotionCount());
+		}
+		
+		PotionHandler.getInstance().initPotions();
 		
 		for (Modules m : Modules.values())
 		{

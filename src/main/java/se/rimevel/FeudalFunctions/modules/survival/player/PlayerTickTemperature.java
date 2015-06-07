@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeDictionary;
@@ -18,6 +19,8 @@ import se.rimevel.FeudalFunctions.core.util.UtilLog;
 import se.rimevel.FeudalFunctions.core.util.UtilMath;
 import se.rimevel.FeudalFunctions.core.util.UtilPlayer;
 import se.rimevel.FeudalFunctions.modules.survival.interfaces.ITemperatureModifier;
+import se.rimevel.FeudalFunctions.modules.survival.potions.PotionFrostbite;
+import se.rimevel.FeudalFunctions.modules.survival.potions.PotionSunstroke;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -58,6 +61,16 @@ public class PlayerTickTemperature
 			temp += getArmorTempModifier(player, temp);
 			//UtilLog.info("WithArmor:" + temp);
 			PlayerDataStats.get(player).adjustBodyTemp(temp);
+			
+			if(PlayerDataStats.get(player).getTemperature() >= 100)
+			{
+				player.addPotionEffect(new PotionEffect(PotionSunstroke.INSTANCE.id, 140, 0));
+			}
+			
+			if(PlayerDataStats.get(player).getTemperature() <= 0)
+			{
+				player.addPotionEffect(new PotionEffect(PotionFrostbite.INSTANCE.id, 140, 0));
+			}
 		}
 	}
 	

@@ -56,8 +56,8 @@ public enum UtilArmorMaterials
 	
 	public static void setTemperatureModifers()
 	{
-		CLOTH.tempModCold 		= 1; 	CLOTH.tempModHot 		= 0;
-		LEATHER.tempModCold		= 2;	LEATHER.tempModHot 		= 1;
+		CLOTH.tempModCold 		= 1; 	CLOTH.tempModHot 		= -2;
+		LEATHER.tempModCold		= 2;	LEATHER.tempModHot 		= -1;
 		COPPER.tempModCold 		= -1;	COPPER.tempModHot		= 2;
 		BRONZE.tempModCold 		= -1;	BRONZE.tempModHot		= 2;
 		IRON.tempModCold 		= -2;	IRON.tempModHot			= 2;

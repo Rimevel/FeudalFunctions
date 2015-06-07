@@ -89,4 +89,9 @@ public class MModule
 		
 		return null;
 	}
+	
+	public int customPotionCount()
+	{
+		return 0;
+	}
 }
