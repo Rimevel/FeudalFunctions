@@ -4,11 +4,13 @@ import java.util.UUID;
 
 import se.rimevel.FeudalFunctions.core.tiles.TileEntityContainerBase;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.common.UsernameCache;
 
 public class UtilPlayer
 {
@@ -233,7 +235,22 @@ public class UtilPlayer
 	
 	public static UUID getPlayerId(EntityPlayer player)
 	{
-		return player.getUniqueID();
+		return player.getGameProfile().getId();
+	}
+	
+	public static UUID getPlayerId(Entity player)
+	{
+		if(player instanceof EntityPlayer)
+		{
+			UtilLog.info(((EntityPlayer) player).getGameProfile().getId().toString());
+			return ((EntityPlayer) player).getGameProfile().getId();
+		}
+		return null;
+	}
+	
+	public static String getPlayerUsername(EntityPlayer player)
+	{
+		return UsernameCache.getLastKnownUsername(player.getGameProfile().getId());
 	}
 	
 	public static ItemStack[] getArmorArray(EntityPlayer player)

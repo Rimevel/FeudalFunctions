@@ -20,8 +20,8 @@ import se.rimevel.FeudalFunctions.core.util.UtilMath;
 import se.rimevel.FeudalFunctions.core.util.UtilPlayer;
 import se.rimevel.FeudalFunctions.modules.smithing.MSmithing;
 import se.rimevel.FeudalFunctions.modules.smithing.tiles.TileEntityBloomery;
+import se.rimevel.FeudalFunctions.modules.survival.interfaces.IFireTool;
 import se.rimevel.FeudalFunctions.modules.survival.interfaces.ITemperatureModifier;
-import se.rimevel.FeudalFunctions.modules.survival.util.IFireTool;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

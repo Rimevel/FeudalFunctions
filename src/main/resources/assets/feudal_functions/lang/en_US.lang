@@ -75,4 +75,4 @@ tile.feudal_functions:ore.tin.name=Tin Ore
 tile.feudal_functions:ore.silver.name=Silver Ore
 
 potion.frostbite=Frostbite
-potion.sunstroke=Sunstroke
+potion.heatstroke=Heatstroke

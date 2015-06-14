@@ -11,15 +11,15 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 public class PlayerDataStorage
 {
-	private static final Map<UUID, NBTTagCompound> playerData = new HashMap<UUID, NBTTagCompound>();
+	private static final Map<String, NBTTagCompound> playerData = new HashMap<String, NBTTagCompound>();
 	
-	public static void storePlayerData(UUID id, NBTTagCompound compound)
+	public static void storePlayerData(UUID id, String key, NBTTagCompound compound)
 	{
-		playerData.put(id, compound);
+		playerData.put(id.toString() + "::" + key, compound);
 	}
 	
-	public static NBTTagCompound readPlayerData(UUID id)
+	public static NBTTagCompound readPlayerData(UUID id, String key)
 	{
-		return playerData.remove(id);
+		return playerData.remove(id.toString() + "::" + key);
 	}
 }

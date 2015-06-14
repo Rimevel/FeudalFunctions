@@ -7,6 +7,7 @@ import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
 public class PlayerSurvivalEvents
@@ -17,12 +18,16 @@ public class PlayerSurvivalEvents
 		PlayerDataStats.register(event.entity);
 	}
 	
+	/**
+	 * Loads all extra data from PlayerDataStorage when the player respawns.
+	 * @param event
+	 */
 	@SubscribeEvent
 	public void onEntityJoinWorld(EntityJoinWorldEvent event)
 	{
 		if(!event.world.isRemote && event.entity instanceof EntityPlayer)
 		{
-			NBTTagCompound playerData = PlayerDataStorage.readPlayerData(UtilPlayer.getPlayerId((EntityPlayer) event.entity));
+			NBTTagCompound playerData = PlayerDataStorage.readPlayerData(UtilPlayer.getPlayerId(event.entity), "stats");
 			
 			if(playerData != null)
 			{
@@ -33,6 +38,10 @@ public class PlayerSurvivalEvents
 		}
 	}
 	
+	/**
+	 * Saves all extra data from the player to PlayerDataStorage when the player dies.
+	 * @param event
+	 */
 	@SubscribeEvent
 	public void onLivingDeathEvent(LivingDeathEvent event)
 	{
@@ -41,7 +50,7 @@ public class PlayerSurvivalEvents
 			NBTTagCompound playerData = new NBTTagCompound();
 			event.entity.getExtendedProperties(PlayerDataStats.EXT_PROP_NAME).saveNBTData(playerData);
 			
-			PlayerDataStorage.storePlayerData(UtilPlayer.getPlayerId((EntityPlayer) event.entity), playerData);
+			PlayerDataStorage.storePlayerData(UtilPlayer.getPlayerId(event.entity), "stats", playerData);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package se.rimevel.FeudalFunctions.modules.survival.util;
+package se.rimevel.FeudalFunctions.modules.survival.interfaces;
 
 public interface IFireTool
 {
