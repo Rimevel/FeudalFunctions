@@ -2,10 +2,13 @@ package se.rimevel.FeudalFunctions.modules.survival.player;
 
 import se.rimevel.FeudalFunctions.core.util.UtilPlayer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemPotion;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
@@ -51,6 +54,15 @@ public class PlayerSurvivalEvents
 			event.entity.getExtendedProperties(PlayerDataStats.EXT_PROP_NAME).saveNBTData(playerData);
 			
 			PlayerDataStorage.storePlayerData(UtilPlayer.getPlayerId(event.entity), "stats", playerData);
+		}
+	}
+	
+	@SubscribeEvent
+	public void onPlayerUseItem(PlayerUseItemEvent.Finish event)
+	{
+		if(event.item.getItem() == Items.potionitem && event.item.getItemDamage() == 0)
+		{
+			PlayerDataStats.get(event.entityPlayer).adjustBodyHydro(50F);
 		}
 	}
 }

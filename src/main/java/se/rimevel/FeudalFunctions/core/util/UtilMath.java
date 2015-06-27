@@ -19,16 +19,16 @@ public class UtilMath
 		return (int)(value / maxValue * pixelLength);
 	}
 	
-	public static float calculateAvarage(List<Integer> values)
+	public static float calculateAvarage(List<Float> values)
 	{
-		Integer sum = 0;
+		float sum = 0;
 		if(!values.isEmpty())
 		{
-			for(int v : values)
+			for(float v : values)
 			{
 				sum += v;
 			}
-			return sum.floatValue() / values.size();
+			return sum / values.size();
 		}
 		return sum;
 	}

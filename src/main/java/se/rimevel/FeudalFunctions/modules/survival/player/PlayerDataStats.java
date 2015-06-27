@@ -14,24 +14,28 @@ public class PlayerDataStats extends PlayerDataExtenderBase
 {
 	public final static String EXT_PROP_NAME = "PlayerDataStats";
 	
-	private int bodyTemp;
+	private float bodyTemp;
+	private float bodyHydration;
 	
 	public PlayerDataStats()
 	{
 		super(EXT_PROP_NAME);
-		this.bodyTemp = 50;
+		this.bodyTemp = 50F;
+		this.bodyHydration = 50F;
 	}
 	
 	@Override
 	public void writeData(NBTTagCompound compound)
 	{
-		compound.setShort("BodyTemp", (short) bodyTemp);
+		compound.setFloat("BodyTemp", bodyTemp);
+		compound.setFloat("BodyHydration", bodyHydration);
 	}
 	
 	@Override
 	public void readData(NBTTagCompound compound)
 	{
-		this.bodyTemp = compound.getShort("BodyTemp");
+		this.bodyTemp = compound.getFloat("BodyTemp");
+		this.bodyHydration = compound.getFloat("BodyHydration");
 	}
 	
 	public void dataSync()
@@ -56,40 +60,71 @@ public class PlayerDataStats extends PlayerDataExtenderBase
 		return (PlayerDataStats) player.getExtendedProperties(EXT_PROP_NAME);
 	}
 	
-	public int adjustBodyTemp(int modifier)
+	public float adjustBodyTemp(float modifier)
 	{
-		if(modifier == 0)
+		if(modifier == 0F)
 		{
-			if(bodyTemp <= 49){bodyTemp += 1;}
-			if(bodyTemp >= 51){bodyTemp += -1;}
-			dataSync();
+			if(bodyTemp < 50F){bodyTemp += 1.0F;}
+			if(bodyTemp > 50F){bodyTemp += -1.0F;}
 			return bodyTemp;
 		}
-		if(bodyTemp + modifier > 100)
+		if(bodyTemp + modifier > 100F)
 		{
-			bodyTemp = 100;
-			dataSync();
+			bodyTemp = 100F;
 			return bodyTemp;
 		}
-		if(bodyTemp + modifier < 0)
+		if(bodyTemp + modifier < 0F)
 		{
 			bodyTemp = 0;
-			dataSync();
 			return bodyTemp;
 		}
 		
 		bodyTemp += modifier;
-		dataSync();
 		return bodyTemp;
 	}
 	
-	public void setTemperature(int temperature)
+	public void setTemperature(float temperature)
 	{
 		this.bodyTemp = temperature;
 	}
 	
-	public int getTemperature()
+	public float getTemperature()
 	{
 		return bodyTemp;
+	}
+	
+	public float adjustBodyHydro(float modifier)
+	{
+		if(modifier == 0)
+		{
+			if(bodyHydration < 100F)
+			{
+				bodyHydration += 1F;
+				return bodyHydration;
+			}
+		}
+		if(bodyHydration + modifier > 100F)
+		{
+			bodyHydration = 100F;
+			return bodyHydration;
+		}
+		if(bodyHydration + modifier < 0F)
+		{
+			bodyHydration = 0F;
+			return bodyHydration;
+		}
+		
+		bodyHydration += modifier;
+		return bodyHydration;
+	}
+	
+	public void setHydration(float bodyHydration)
+	{
+		this.bodyHydration = bodyHydration;
+	}
+	
+	public float getHydration()
+	{
+		return bodyHydration;
 	}
 }

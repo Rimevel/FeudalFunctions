@@ -1,6 +1,7 @@
 package se.rimevel.FeudalFunctions.modules.survival.network.packets;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import se.rimevel.FeudalFunctions.core.ModCore;
@@ -17,25 +18,35 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
 public class PacketPlayerStats implements IMessage
 {
-	int bodyTemp;
+	float bodyTemp;
+	float bodyHydration;
 	
 	public PacketPlayerStats(){}
 	
 	public PacketPlayerStats(PlayerDataStats stats)
 	{
 		this.bodyTemp = stats.getTemperature();
+		this.bodyHydration = stats.getHydration();
 	}
 	
 	@Override
 	public void fromBytes(ByteBuf buffer)
 	{
-		this.bodyTemp = ByteBufUtils.readVarShort(buffer);
+		NBTTagCompound tag = ByteBufUtils.readTag(buffer);
+		
+		this.bodyTemp = tag.getFloat("Temp");
+		this.bodyHydration = tag.getFloat("Hydro");
 	}
 
 	@Override
 	public void toBytes(ByteBuf buffer)
 	{
-		ByteBufUtils.writeVarShort(buffer, this.bodyTemp);
+		NBTTagCompound tag = new NBTTagCompound();
+		
+		tag.setFloat("Temp", this.bodyTemp);
+		tag.setFloat("Hydro", this.bodyHydration);
+		
+		ByteBufUtils.writeTag(buffer, tag);
 	}
 	
 	public static class PacketPlayerStatsHandler extends NetworkMsgClient
@@ -47,6 +58,7 @@ public class PacketPlayerStats implements IMessage
 			
 			PlayerDataStats data = PlayerDataStats.get(player);
 			data.setTemperature(m.bodyTemp);
+			data.setHydration(m.bodyHydration);
 			
 			return null;
 		}

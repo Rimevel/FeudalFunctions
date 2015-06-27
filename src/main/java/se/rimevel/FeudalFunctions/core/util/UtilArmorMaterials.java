@@ -16,8 +16,8 @@ public enum UtilArmorMaterials
 	DIAMOND;
 	
 	private ArmorMaterial material;
-	private int tempModHot;
-	private int tempModCold;
+	private float tempModHot;
+	private float tempModCold;
 	
 	private UtilArmorMaterials()
 	{
@@ -29,9 +29,9 @@ public enum UtilArmorMaterials
 		return this.material;
 	}
 	
-	public int getTemperatureModifier(int currentTemp)
+	public float getTemperatureModifier(float currentTemp)
 	{
-		if(currentTemp < 0)
+		if(currentTemp < 0F)
 		{
 			return tempModCold;
 		}
@@ -56,14 +56,14 @@ public enum UtilArmorMaterials
 	
 	public static void setTemperatureModifers()
 	{
-		CLOTH.tempModCold 		= 1; 	CLOTH.tempModHot 		= -2;
-		LEATHER.tempModCold		= 2;	LEATHER.tempModHot 		= -1;
-		COPPER.tempModCold 		= -1;	COPPER.tempModHot		= 2;
-		BRONZE.tempModCold 		= -1;	BRONZE.tempModHot		= 2;
-		IRON.tempModCold 		= -2;	IRON.tempModHot			= 2;
-		GOLD.tempModCold 		= -1;	GOLD.tempModHot			= 3;
-		CHAINMAIL.tempModCold 	= 0;	CHAINMAIL.tempModHot	= 1;
-		STEEL.tempModCold 		= -3;	STEEL.tempModHot		= 3;
-		DIAMOND.tempModCold 	= -2;	DIAMOND.tempModHot		= -1;
+		CLOTH.tempModCold 		= 0.2F; 	CLOTH.tempModHot 		= -1.2F;
+		LEATHER.tempModCold		= 0.5F;		LEATHER.tempModHot 		= -0.5F;
+		COPPER.tempModCold 		= -0.2F;	COPPER.tempModHot		= 0.5F;
+		BRONZE.tempModCold 		= -0.2F;	BRONZE.tempModHot		= 0.2F;
+		IRON.tempModCold 		= -0.3F;	IRON.tempModHot			= 0.3F;
+		GOLD.tempModCold 		= -0.3F;	GOLD.tempModHot			= 0.3F;
+		CHAINMAIL.tempModCold 	= 0F;		CHAINMAIL.tempModHot	= 0.1F;
+		STEEL.tempModCold 		= -0.5F;	STEEL.tempModHot		= 0.5F;
+		DIAMOND.tempModCold 	= -1.0F;	DIAMOND.tempModHot		= -1.0F;
 	}
 }

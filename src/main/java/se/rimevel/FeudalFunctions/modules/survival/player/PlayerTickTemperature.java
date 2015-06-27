@@ -26,22 +26,16 @@ import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.relauncher.Side;
 
 public class PlayerTickTemperature
-{
-	/**
-	 * List of all armors with temperature modifiers.
-	 */
-	public static ArrayList<UtilArmorMaterials> armorMod;
-	
+{	
 	/**
 	 * List of all blocks with temperature modifiers.
 	 */
-	public static HashMap<Block, Integer> blockMod; 
+	public static HashMap<Block, Float> blockMod; 
 	
 	/**
 	 * Ticks once for each player every tick.
 	 * @param event
 	 */
-	
 	@SubscribeEvent
 	public void onPlayerTick(PlayerTickEvent event)
 	{	
@@ -55,12 +49,70 @@ public class PlayerTickTemperature
 			int y = (int) player.posY;
 			int z = (int) player.posZ;
 			
-			int temp = getTemperatureAtLocation(player.worldObj, x, y, z);
+			float temp = getTemperatureAtLocation(player.worldObj, x, y, z);
 			
-			//UtilLog.info("NoArmor:" + temp);
-			temp += getArmorTempModifier(player, temp);
-			//UtilLog.info("WithArmor:" + temp);
-			PlayerDataStats.get(player).adjustBodyTemp(temp);
+			if(player.isBurning())
+			{
+				PlayerDataStats.get(player).adjustBodyTemp(100);
+			}
+			else if(player.isInWater())
+			{
+				if(temp < 0)
+				{
+					temp -= 1.0F;
+				}
+				else
+				{
+					temp -= 0.5F;
+				}
+			}
+			else
+			{
+				temp += getArmorTempModifier(player, temp);
+			}
+			
+			float hydro;
+			
+			if(temp > 5.0F)
+			{
+				hydro = -1F;
+			}
+			else if(temp > 1F)
+			{
+				hydro = -0.5F;
+			}
+			else if(temp > 0F)
+			{
+				hydro = -0.2F;
+			}
+			else
+			{
+				hydro = -0.1F;
+			}
+			
+			if(player.isSprinting())
+			{
+				hydro *= 2;
+			}
+			
+			PlayerDataStats.get(player).adjustBodyHydro(hydro);
+			
+			UtilLog.info("TempMod:" + temp);
+			
+			if(!player.isBurning() && temp < 7.0F && temp > 0F && PlayerDataStats.get(player).getHydration() > 0F)
+			{
+				float t = PlayerDataStats.get(player).getTemperature();
+				if(t <= 75F)
+				{
+					PlayerDataStats.get(player).adjustBodyTemp(temp);
+				}
+			}
+			else
+			{
+				PlayerDataStats.get(player).adjustBodyTemp(temp);
+			}
+			
+			PlayerDataStats.get(player).dataSync();
 			
 			if(PlayerDataStats.get(player).getTemperature() >= 100)
 			{
@@ -78,51 +130,58 @@ public class PlayerTickTemperature
 	{	
 		if(blockMod != null){return;}
 		
-		blockMod = new HashMap<Block, Integer>();
+		blockMod = new HashMap<Block, Float>();
 		
-		blockMod.put(Blocks.fire, 3);
-		blockMod.put(Blocks.lava, 5);
-		blockMod.put(Blocks.snow, -2);
-		blockMod.put(Blocks.snow_layer, -1);
-		blockMod.put(Blocks.ice, -2);
-		blockMod.put(Blocks.packed_ice, -2);
+		blockMod.put(Blocks.fire, 1.0F);
+		blockMod.put(Blocks.lava, 7.5F);
+		blockMod.put(Blocks.snow, -1.0F);
+		blockMod.put(Blocks.snow_layer, -0.2F);
+		blockMod.put(Blocks.ice, -0.7F);
+		blockMod.put(Blocks.packed_ice, -2.0F);
 	}
 	
-	public static int getTemperatureAtLocation(World world, int x, int y, int z)
+	public static float getTemperatureAtLocation(World world, int x, int y, int z)
 	{
-		int tempMod = 0;
+		float tempMod = 0;
+		float biomeTempMod = 0;
+		
 		
 		BiomeGenBase biome = world.getBiomeGenForCoords(x, z);
 		
 		if(BiomeDictionary.isBiomeOfType(biome, Type.NETHER))
-		{tempMod += 8;}
+		{biomeTempMod += 10.0F;}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.HOT))
-		{tempMod += 2;}
+		{biomeTempMod += 1.0F;}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.COLD))
-		{tempMod += -2;}
+		{biomeTempMod += -1.0F;}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.WET))
-		{tempMod += -1;}
+		{biomeTempMod += -0.5F;}
 		if(BiomeDictionary.isBiomeOfType(biome, Type.DRY))
-		{tempMod += 1;}
+		{biomeTempMod += 0.5F;}
+		
 		if(!world.canBlockSeeTheSky(x, y, z))
 		{
 			if(y < 50)
 			{
-				tempMod = 0;
+				tempMod = 0F;
 			}
 			else if(y < 25)
 			{
-				tempMod = -2;
-			}
-			else if(!world.isDaytime())
-			{
-				tempMod /= 2;
+				tempMod = -0.25F;
 			}
 		}
 		else
 		{
+			tempMod += biomeTempMod;
+			
+			if(!world.isDaytime())
+			{
+				tempMod += -0.5F;
+			}
 			if(world.isRaining())
-			{tempMod += -1;}
+			{
+				tempMod += -0.5F;
+			}
 		}
 		
 		final int SCAN_RADIUS = 4;
@@ -131,7 +190,7 @@ public class PlayerTickTemperature
 		int pY;
 		int pZ;
 		
-		ArrayList<Integer> values = new ArrayList<Integer>();
+		ArrayList<Float> values = new ArrayList<Float>();
 		
 		for(pY = y + (SCAN_RADIUS * -1); pY < (y + SCAN_RADIUS + 1); pY++)
 		{
@@ -151,7 +210,7 @@ public class PlayerTickTemperature
 					for (Entry e : blockMod.entrySet())
 					{
 						Block block = (Block) e.getKey();
-						int mod = (Integer) e.getValue();
+						float mod = (Float) e.getValue();
 						
 						if(Block.isEqualTo(block, worldBlock))
 						{
@@ -167,7 +226,7 @@ public class PlayerTickTemperature
 		return tempMod;
 	}
 	
-	public static int getBlockTempModifier(Block block)
+	public static float getBlockTempModifier(Block block)
 	{
 		if(block instanceof ITemperatureModifier)
 		{
@@ -177,19 +236,19 @@ public class PlayerTickTemperature
 		for (Entry e : blockMod.entrySet())
 		{
 			Block eBlock = (Block) e.getKey();
-			int mod = (Integer) e.getValue();
+			float mod = (Float) e.getValue();
 			
 			if(Block.isEqualTo(block, eBlock))
 			{
 				return mod;
 			}
 		}
-		return 0;
+		return 0F;
 	}
 	
-	public static int getArmorTempModifier(EntityPlayer player, int currentTemp)
+	public static float getArmorTempModifier(EntityPlayer player, float temp)
 	{
-		Integer tempMod = 0;
+		float tempMod = 0;
 		
 		for(ItemStack stack : UtilPlayer.getArmorArray(player))
 		{
@@ -207,11 +266,11 @@ public class PlayerTickTemperature
 			{
 				if(armor.getMaterial() == ((ItemArmor)stack.getItem()).getArmorMaterial())
 				{
-					tempMod += armor.getTemperatureModifier(currentTemp);
+					tempMod += armor.getTemperatureModifier(temp);
 				}
 			}
 		}
 
-		return (int)(tempMod.floatValue() / player.inventory.armorInventory.length);
+		return tempMod / player.inventory.armorInventory.length;
 	}
 }

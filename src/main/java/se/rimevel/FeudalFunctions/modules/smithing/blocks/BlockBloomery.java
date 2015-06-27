@@ -164,11 +164,11 @@ public class BlockBloomery extends BlockContainerBase implements ITemperatureMod
 	}
 	
 	@Override
-	public int getTempMod()
+	public float getTempMod()
 	{
 		if(this.lightValue > 0)
 		{
-			return 2;
+			return 1.7F;
 		}
 		return 0;
 	}

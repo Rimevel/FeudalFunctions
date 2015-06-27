@@ -196,11 +196,11 @@ public class BlockAnvil extends BlockContainerBase implements ITemperatureModifi
 	}
 	
 	@Override
-	public int getTempMod()
+	public float getTempMod()
 	{
 		if(this.lightValue > 0)
 		{
-			return 2;
+			return 1.0F;
 		}
 		return 0;
 	}
