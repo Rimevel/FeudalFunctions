@@ -3,14 +3,14 @@ package se.rimevel.FeudalFunctions.modules.survival.potions;
 import net.minecraft.entity.EntityLivingBase;
 import se.rimevel.FeudalFunctions.core.potions.PotionBase;
 
-public class PotionSunstroke extends PotionBase
+public class PotionHeatstroke extends PotionBase
 {
-	public static PotionSunstroke INSTANCE = null;
+	public static PotionHeatstroke INSTANCE = null;
 	private int statusIconIndex = -1;
 	
-	public PotionSunstroke(int id)
+	public PotionHeatstroke(int id)
 	{
-		super(id, "potion.sunstroke", true, 77222200, 1.0D, 0,1);
+		super(id, "potion.heatstroke", true, 77222200, 1.0D, 0,1);
 		INSTANCE = this;
 	}
 	

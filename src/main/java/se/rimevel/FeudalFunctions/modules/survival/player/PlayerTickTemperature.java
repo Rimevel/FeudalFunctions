@@ -20,7 +20,7 @@ import se.rimevel.FeudalFunctions.core.util.UtilMath;
 import se.rimevel.FeudalFunctions.core.util.UtilPlayer;
 import se.rimevel.FeudalFunctions.modules.survival.interfaces.ITemperatureModifier;
 import se.rimevel.FeudalFunctions.modules.survival.potions.PotionFrostbite;
-import se.rimevel.FeudalFunctions.modules.survival.potions.PotionSunstroke;
+import se.rimevel.FeudalFunctions.modules.survival.potions.PotionHeatstroke;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -116,7 +116,7 @@ public class PlayerTickTemperature
 			
 			if(PlayerDataStats.get(player).getTemperature() >= 100)
 			{
-				player.addPotionEffect(new PotionEffect(PotionSunstroke.INSTANCE.id, 140, 0));
+				player.addPotionEffect(new PotionEffect(PotionHeatstroke.INSTANCE.id, 140, 0));
 			}
 			
 			if(PlayerDataStats.get(player).getTemperature() <= 0)

@@ -20,7 +20,7 @@ import se.rimevel.FeudalFunctions.modules.survival.items.SurvivalItems;
 import se.rimevel.FeudalFunctions.modules.survival.player.PlayerSurvivalEvents;
 import se.rimevel.FeudalFunctions.modules.survival.player.PlayerTickTemperature;
 import se.rimevel.FeudalFunctions.modules.survival.potions.PotionFrostbite;
-import se.rimevel.FeudalFunctions.modules.survival.potions.PotionSunstroke;
+import se.rimevel.FeudalFunctions.modules.survival.potions.PotionHeatstroke;
 import se.rimevel.FeudalFunctions.modules.survival.renderers.RenderCampfire;
 import se.rimevel.FeudalFunctions.modules.survival.renderers.RenderGround;
 import se.rimevel.FeudalFunctions.modules.survival.renderers.models.ModelCampfire;
@@ -98,6 +98,6 @@ public class MSurvival extends MModule
 	private void addPotions()
 	{
 		new PotionFrostbite(PotionHandler.getInstance().getNextPotionId());
-		new PotionSunstroke(PotionHandler.getInstance().getNextPotionId());
+		new PotionHeatstroke(PotionHandler.getInstance().getNextPotionId());
 	}
 }

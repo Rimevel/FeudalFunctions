@@ -233,6 +233,24 @@ public class UtilPlayer
 		return null;
 	}
 	
+	/**
+	 * Get the block the player is looking at. Can be set to collide with liquids.
+	 * @param world World to get data from.
+	 * @param player Player to check.
+	 * @param distance Max distance to check.
+	 * @param collideWithLiquids If true then line of sight will collide with any liquid.
+	 * @return The Block the player is looking at. Null if no block is found.
+	 */
+	public static Block getBlockPlayerIsLookingAt(World world, EntityPlayer player, double distance, boolean collideWithLiquids)
+	{
+		MovingObjectPosition pos = getPointPlayerIsLookingAt(world, player, distance, collideWithLiquids);
+		if(pos != null)
+		{
+			return world.getBlock(pos.blockX, pos.blockY, pos.blockZ);
+		}
+		return null;
+	}
+	
 	public static UUID getPlayerId(EntityPlayer player)
 	{
 		return player.getGameProfile().getId();
