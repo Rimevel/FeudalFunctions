@@ -68,7 +68,20 @@ public class PlayerTickTemperature
 			}
 			else
 			{
-				temp += getArmorTempModifier(player, temp);
+				float armorTemp = getArmorTempModifier(player, temp);
+				
+				if(temp < 0F && (temp + armorTemp) > 0F)
+				{
+					temp = 0F;
+				}
+				else if(temp >= 0F && (temp + armorTemp) < 0F)
+				{
+					temp = 0F;
+				}
+				else
+				{
+					temp += armorTemp;
+				}
 			}
 			
 			float hydro;
@@ -97,7 +110,7 @@ public class PlayerTickTemperature
 			
 			PlayerDataStats.get(player).adjustBodyHydro(hydro);
 			
-			UtilLog.info("TempMod:" + temp);
+			//UtilLog.info("TempMod:" + temp);
 			
 			if(!player.isBurning() && temp < 7.0F && temp > 0F && PlayerDataStats.get(player).getHydration() > 0F)
 			{
@@ -203,7 +216,7 @@ public class PlayerTickTemperature
 					
 					if(worldBlock instanceof ITemperatureModifier)
 					{
-						values.add(((ITemperatureModifier)worldBlock).getTempMod());
+						values.add(((ITemperatureModifier)worldBlock).getTempMod(tempMod));
 						continue;
 					}
 					
@@ -226,11 +239,11 @@ public class PlayerTickTemperature
 		return tempMod;
 	}
 	
-	public static float getBlockTempModifier(Block block)
+	public static float getBlockTempModifier(Block block, float temp)
 	{
 		if(block instanceof ITemperatureModifier)
 		{
-			return((ITemperatureModifier)block).getTempMod();
+			return((ITemperatureModifier)block).getTempMod(temp);
 		}
 		
 		for (Entry e : blockMod.entrySet())
@@ -256,7 +269,7 @@ public class PlayerTickTemperature
 			
 			if(stack.getItem() instanceof ITemperatureModifier)
 			{
-				tempMod += ((ITemperatureModifier)stack.getItem()).getTempMod();
+				tempMod += ((ITemperatureModifier)stack.getItem()).getTempMod(temp);
 				continue;
 			}
 			
@@ -271,6 +284,8 @@ public class PlayerTickTemperature
 			}
 		}
 
-		return tempMod / player.inventory.armorInventory.length;
+		tempMod = tempMod / player.inventory.armorInventory.length;
+		
+		return tempMod;
 	}
 }

@@ -1,22 +1,34 @@
 package se.rimevel.FeudalFunctions.modules.survival.player;
 
+import java.util.List;
 import java.util.Random;
 
+import akka.japi.Util;
 import se.rimevel.FeudalFunctions.core.util.UtilLog;
 import se.rimevel.FeudalFunctions.core.util.UtilMath;
+import se.rimevel.FeudalFunctions.core.util.UtilOreDict;
 import se.rimevel.FeudalFunctions.core.util.UtilPlayer;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemPotion;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.ChunkPosition;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
+import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
@@ -74,10 +86,13 @@ public class PlayerSurvivalEvents
 		}
 	}
 	
+	/**
+	 * Player can drink when using empty hand on water sources.
+	 * @param event
+	 */
 	@SubscribeEvent
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
-		UtilLog.info("WOW!");
 		if(event.world.isRemote){return;}
 		
 		if(UtilPlayer.isHoldingItem(event.entityPlayer)){return;}

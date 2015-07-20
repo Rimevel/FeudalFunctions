@@ -12,6 +12,7 @@ item.feudal_functions:parts_copper.hoe_head.name=Copper Hoe Head
 item.feudal_functions:parts_copper.shovel_head.name=Copper Shovel Head
 item.feudal_functions:parts_copper.sword_blade.name=Copper Sword Blade
 item.feudal_functions:parts_copper.hammer_head.name=Copper Hammer Head
+item.feudal_functions:parts_copper.plate.name=Copper Plate
 
 item.feudal_functions:parts_bronze.axe_head.name=Bronze Axe Head
 item.feudal_functions:parts_bronze.pickaxe_head.name=Bronze Pickaxe Head
@@ -19,6 +20,7 @@ item.feudal_functions:parts_bronze.hoe_head.name=Bronze Hoe Head
 item.feudal_functions:parts_bronze.shovel_head.name=Bronze Shovel Head
 item.feudal_functions:parts_bronze.sword_blade.name=Bronze Sword Blade
 item.feudal_functions:parts_bronze.hammer_head.name=Bronze Hammer Head
+item.feudal_functions:parts_bronze.plate.name=Bronze Plate
 
 item.feudal_functions:parts_iron.axe_head.name=Iron Axe Head
 item.feudal_functions:parts_iron.pickaxe_head.name=Iron Pickaxe Head
@@ -26,6 +28,7 @@ item.feudal_functions:parts_iron.hoe_head.name=Iron Hoe Head
 item.feudal_functions:parts_iron.shovel_head.name=Iron Shovel Head
 item.feudal_functions:parts_iron.sword_blade.name=Iron Sword Blade
 item.feudal_functions:parts_iron.hammer_head.name=Iron Hammer Head
+item.feudal_functions:parts_iron.plate.name=Iron Plate
 
 item.feudal_functions:parts_gold.axe_head.name=Golden Axe Head
 item.feudal_functions:parts_gold.pickaxe_head.name=Golden Pickaxe Head
@@ -33,6 +36,7 @@ item.feudal_functions:parts_gold.hoe_head.name=Golden Hoe Head
 item.feudal_functions:parts_gold.shovel_head.name=Golden Shovel Head
 item.feudal_functions:parts_gold.sword_blade.name=Golden Sword Blade
 item.feudal_functions:parts_gold.hammer_head.name=Golden Hammer Head
+item.feudal_functions:parts_gold.plate.name=Golden Plate
 
 item.feudal_functions:parts_steel.axe_head.name=Steel Axe Head
 item.feudal_functions:parts_steel.pickaxe_head.name=Steel Pickaxe Head
@@ -40,6 +44,7 @@ item.feudal_functions:parts_steel.hoe_head.name=Steel Hoe Head
 item.feudal_functions:parts_steel.shovel_head.name=Steel Shovel Head
 item.feudal_functions:parts_steel.sword_blade.name=Steel Sword Blade
 item.feudal_functions:parts_steel.hammer_head.name=Steel Hammer Head
+item.feudal_functions:parts_steel.plate.name=Steel Plate
 
 item.feudal_functions:tool_axe_copper.name=Copper Axe
 item.feudal_functions:tool_pickaxe_copper.name=Copper Pickaxe
@@ -69,6 +74,21 @@ item.feudal_functions:tool_hammer_diamond.name=Diamond Hammer
 
 item.feudal_functions:ore.copper.name=Copper Ore
 item.feudal_functions:ore.tin.name=Tin Ore
+
+item.feudal_functions:armor_copper_helmet.name=Copper Helmet
+item.feudal_functions:armor_copper_chest.name=Copper Chestplate
+item.feudal_functions:armor_copper_legs.name=Copper Leggings
+item.feudal_functions:armor_copper_boots.name=Copper Boots
+
+item.feudal_functions:armor_bronze_helmet.name=Bronze Helmet
+item.feudal_functions:armor_bronze_chest.name=Bronze Chestplate
+item.feudal_functions:armor_bronze_legs.name=Bronze Leggings
+item.feudal_functions:armor_bronze_boots.name=Bronze Boots
+
+item.feudal_functions:armor_steel_helmet.name=Steel Helmet
+item.feudal_functions:armor_steel_chest.name=Steel Chestplate
+item.feudal_functions:armor_steel_legs.name=Steel Leggings
+item.feudal_functions:armor_steel_boots.name=Steel Boots
 
 tile.feudal_functions:ore.copper.name=Copper Ore
 tile.feudal_functions:ore.tin.name=Tin Ore

@@ -14,7 +14,7 @@ public class ItemParts extends ItemBase
 {
 	public ItemParts()
 	{
-		super("axe_head", "pickaxe_head", "hoe_head", "shovel_head", "sword_blade", "hammer_head");
+		super("axe_head", "pickaxe_head", "hoe_head", "shovel_head", "sword_blade", "hammer_head", "plate");
 		setCreativeTab(CreativeTabs.tabMaterials);
 		setHasSubtypes(true);
 	}
@@ -39,6 +39,7 @@ public class ItemParts extends ItemBase
 			case SHOVEL_HEAD: return new ItemStack(this, 1, 3);
 			case SWORD_BLADE: return new ItemStack(this, 1, 4);
 			case HAMMER_HEAD: return new ItemStack(this, 1, 5);
+			case PLATE: return new ItemStack(this, 1, 6);
 			default: return new ItemStack(this, 1, 0);
 		}
 	}

@@ -3,6 +3,7 @@ package se.rimevel.FeudalFunctions.core.util;
 import java.util.UUID;
 
 import se.rimevel.FeudalFunctions.core.tiles.TileEntityContainerBase;
+import se.rimevel.FeudalFunctions.core.util.helpers.HelperVector;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -248,6 +249,42 @@ public class UtilPlayer
 		{
 			return world.getBlock(pos.blockX, pos.blockY, pos.blockZ);
 		}
+		return null;
+	}
+	
+	public static HelperVector getEmptySpacePlayerIsLookingAt(World world, EntityPlayer player, double distance, boolean collideWithLiquids)
+	{
+		MovingObjectPosition pos = getPointPlayerIsLookingAt(world, player, distance, collideWithLiquids);
+		
+		if(pos == null){return null;}
+		
+		UtilLog.info("Side:" + pos.sideHit);
+		
+		if(pos.sideHit == 0 && world.isAirBlock(pos.blockX, pos.blockY - 1, pos.blockZ))
+		{
+			return new HelperVector(pos.blockX, pos.blockY - 1, pos.blockZ);
+		}
+		if(pos.sideHit == 1 && world.isAirBlock(pos.blockX, pos.blockY + 1, pos.blockZ))
+		{
+			return new HelperVector(pos.blockX, pos.blockY + 1, pos.blockZ);
+		}
+		if(pos.sideHit == 2 && world.isAirBlock(pos.blockX, pos.blockY, pos.blockZ + 1))
+		{
+			return new HelperVector(pos.blockX, pos.blockY, pos.blockZ + 1);
+		}
+		if(pos.sideHit == 3 && world.isAirBlock(pos.blockX, pos.blockY, pos.blockZ - 1))
+		{
+			return new HelperVector(pos.blockX, pos.blockY, pos.blockZ - 1);
+		}
+		if(pos.sideHit == 4 && world.isAirBlock(pos.blockX - 1, pos.blockY, pos.blockZ))
+		{
+			return new HelperVector(pos.blockX - 1, pos.blockY, pos.blockZ);
+		}
+		if(pos.sideHit == 5 && world.isAirBlock(pos.blockX + 1, pos.blockY, pos.blockZ))
+		{
+			return new HelperVector(pos.blockX + 1, pos.blockY, pos.blockZ);
+		}
+		
 		return null;
 	}
 	

@@ -7,9 +7,11 @@ import java.util.ArrayList;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
+import se.rimevel.FeudalFunctions.core.util.UtilArmorMaterials;
 import se.rimevel.FeudalFunctions.core.util.UtilToolMaterials;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -17,12 +19,20 @@ public class ModItem<T extends Item>
 {
 	private static final ArrayList<WeakReference<ModItem>> items = new ArrayList<WeakReference<ModItem>>();
 	
+	//General vars
 	private String name;
 	private Item instance;
 	private Class<T> itemClass;
+	
+	//Tool vars
 	private float damage;
 	private UtilToolMaterials material;
 	private String repairMaterial;
+	
+	//Armor vars
+	private UtilArmorMaterials armorMaterial;
+	private int type;
+	private String textureName;
 	
 	public ModItem(String name, Class<T> itemClass)
 	{
@@ -36,7 +46,7 @@ public class ModItem<T extends Item>
 		items.add(new WeakReference<ModItem>(this));
 	}
 	
-	public ModItem(String name, Class<T> itemClass, Object ... objects)
+	public ModItem(String name, Class<T> itemClass, UtilArmorMaterials armorMaterial, int type, String textureName)
 	{
 		this.name = name;
 		this.itemClass = itemClass;
@@ -45,27 +55,25 @@ public class ModItem<T extends Item>
 		material = null;
 		repairMaterial = null;
 		
-		for (Object o : objects)
-		{
-			if(o instanceof Float)
-			{
-				if(this.damage > -1F){continue;}
-				
-				this.damage = (Float) o;
-			}
-			else if(o instanceof UtilToolMaterials)
-			{
-				if(this.material != null){continue;}
-				
-				this.material = (UtilToolMaterials) o;
-			}
-			else if(o instanceof String)
-			{
-				if(this.repairMaterial != null){continue;}
-				
-				this.repairMaterial = (String) o;
-			}
-		}
+		this.armorMaterial = armorMaterial;
+		this.type = type;
+		this.textureName = textureName;
+		
+		items.add(new WeakReference<ModItem>(this));
+	}
+	
+	public ModItem(String name, Class<T> itemClass, float damage, UtilToolMaterials toolMaterial, String repairMaterial)
+	{
+		this.name = name;
+		this.itemClass = itemClass;
+		
+		this.damage = damage;
+		this.material = toolMaterial;
+		this.repairMaterial = repairMaterial;
+		
+		this.armorMaterial = null;
+		this.type = -1;
+		this.textureName = null;
 		
 		items.add(new WeakReference<ModItem>(this));
 	}
@@ -100,6 +108,20 @@ public class ModItem<T extends Item>
 					Constructor<?> cl = this.itemClass.getConstructor(float.class, ToolMaterial.class, String.class);
 					Object object = cl.newInstance(this.damage, this.material.getMaterial(), this.repairMaterial);
 					this.instance = (ItemToolBase) object;
+					this.instance.setUnlocalizedName(this.name);
+				}
+				catch (InvocationTargetException e)
+				{
+					e.getTargetException();
+				}
+			}
+			else if(this.itemClass.getSuperclass() == ItemArmorBase.class)
+			{
+				try
+				{
+					Constructor<?> cl = this.itemClass.getConstructor(ArmorMaterial.class, int.class, String.class);
+					Object object = cl.newInstance(this.armorMaterial.getMaterial(), this.type, this.textureName);
+					this.instance = (ItemArmorBase) object;
 					this.instance.setUnlocalizedName(this.name);
 				}
 				catch (InvocationTargetException e)

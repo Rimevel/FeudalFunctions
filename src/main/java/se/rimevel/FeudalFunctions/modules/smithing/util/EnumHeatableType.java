@@ -8,7 +8,8 @@ public enum EnumHeatableType
 	HOE_HEAD("hoe_head"),
 	SHOVEL_HEAD("shovel_head"),
 	SWORD_BLADE("sword_blade"),
-	HAMMER_HEAD("hammer_head");
+	HAMMER_HEAD("hammer_head"),
+	PLATE("plate");
 	
 	public String textureName;
 	

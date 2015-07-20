@@ -124,7 +124,7 @@ public class BlockForge extends BlockContainerBase implements ITemperatureModifi
 	}
 	
 	@Override
-	public float getTempMod()
+	public float getTempMod(float currentTemp)
 	{
 		if(this.lightValue > 0)
 		{

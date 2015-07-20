@@ -24,7 +24,7 @@ public class ItemHeated extends ItemBase
 {	
 	public ItemHeated()
 	{
-		super("ingot", "axe_head", "pickaxe_head", "hoe_head", "shovel_head", "sword_blade", "hammer_head");
+		super("ingot", "axe_head", "pickaxe_head", "hoe_head", "shovel_head", "sword_blade", "hammer_head", "plate");
 		setNoRepair();
 		setMaxStackSize(1);
 		setNoTexture(false);

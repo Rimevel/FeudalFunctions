@@ -159,7 +159,7 @@ public class BlockCampfire extends BlockContainerBase implements ITemperatureMod
 	}
 
 	@Override
-	public float getTempMod()
+	public float getTempMod(float currentTemp)
 	{
 		if(this.lightValue > 0)
 		{

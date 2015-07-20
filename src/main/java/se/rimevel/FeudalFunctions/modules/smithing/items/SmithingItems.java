@@ -1,7 +1,9 @@
 package se.rimevel.FeudalFunctions.modules.smithing.items;
 
 import net.minecraft.item.Item.ToolMaterial;
+import se.rimevel.FeudalFunctions.core.items.ItemArmorBase;
 import se.rimevel.FeudalFunctions.core.items.ModItem;
+import se.rimevel.FeudalFunctions.core.util.UtilArmorMaterials;
 import se.rimevel.FeudalFunctions.core.util.UtilToolMaterials;
 import se.rimevel.FeudalFunctions.modules.smithing.items.tools.ItemToolAxe;
 import se.rimevel.FeudalFunctions.modules.smithing.items.tools.ItemToolHammer;
@@ -49,4 +51,19 @@ public class SmithingItems
 	public final static ModItem<WeaponSword> weapon_sword_copper = new ModItem<WeaponSword>("weapon_sword_copper", WeaponSword.class, 2F, UtilToolMaterials.COPPER, "ingotCopper");
 	public final static ModItem<WeaponSword> weapon_sword_bronze = new ModItem<WeaponSword>("weapon_sword_bronze", WeaponSword.class, 2F, UtilToolMaterials.BRONZE, "ingotBronze");
 	public final static ModItem<WeaponSword> weapon_sword_steel = new ModItem<WeaponSword>("weapon_sword_steel", WeaponSword.class, 2F, UtilToolMaterials.STEEL, "ingotSteel");
+	
+	public final static ModItem<ItemArmorBasic> armor_copper_helmet = new ModItem<ItemArmorBasic>("armor_copper_helmet", ItemArmorBasic.class, UtilArmorMaterials.COPPER, 0, "armor_copper");
+	public final static ModItem<ItemArmorBasic> armor_copper_chest = new ModItem<ItemArmorBasic>("armor_copper_chest", ItemArmorBasic.class, UtilArmorMaterials.COPPER, 1, "armor_copper");
+	public final static ModItem<ItemArmorBasic> armor_copper_legs = new ModItem<ItemArmorBasic>("armor_copper_legs", ItemArmorBasic.class, UtilArmorMaterials.COPPER, 2, "armor_copper");
+	public final static ModItem<ItemArmorBasic> armor_copper_boots = new ModItem<ItemArmorBasic>("armor_copper_boots", ItemArmorBasic.class, UtilArmorMaterials.COPPER, 3, "armor_copper");
+	
+	public final static ModItem<ItemArmorBasic> armor_bronze_helmet = new ModItem<ItemArmorBasic>("armor_bronze_helmet", ItemArmorBasic.class, UtilArmorMaterials.BRONZE, 0, "armor_bronze");
+	public final static ModItem<ItemArmorBasic> armor_bronze_chest = new ModItem<ItemArmorBasic>("armor_bronze_chest", ItemArmorBasic.class, UtilArmorMaterials.BRONZE, 1, "armor_bronze");
+	public final static ModItem<ItemArmorBasic> armor_bronze_legs = new ModItem<ItemArmorBasic>("armor_bronze_legs", ItemArmorBasic.class, UtilArmorMaterials.BRONZE, 2, "armor_bronze");
+	public final static ModItem<ItemArmorBasic> armor_bronze_boots = new ModItem<ItemArmorBasic>("armor_bronze_boots", ItemArmorBasic.class, UtilArmorMaterials.BRONZE, 3, "armor_bronze");
+	
+	public final static ModItem<ItemArmorBasic> armor_steel_helmet = new ModItem<ItemArmorBasic>("armor_steel_helmet", ItemArmorBasic.class, UtilArmorMaterials.STEEL, 0, "armor_steel");
+	public final static ModItem<ItemArmorBasic> armor_steel_chest = new ModItem<ItemArmorBasic>("armor_steel_chest", ItemArmorBasic.class, UtilArmorMaterials.STEEL, 1, "armor_steel");
+	public final static ModItem<ItemArmorBasic> armor_steel_legs = new ModItem<ItemArmorBasic>("armor_steel_legs", ItemArmorBasic.class, UtilArmorMaterials.STEEL, 2, "armor_steel");
+	public final static ModItem<ItemArmorBasic> armor_steel_boots = new ModItem<ItemArmorBasic>("armor_steel_boots", ItemArmorBasic.class, UtilArmorMaterials.STEEL, 3, "armor_steel");
 }
