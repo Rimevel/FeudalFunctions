@@ -2,10 +2,13 @@ package se.rimevel.FeudalFunctions.modules.smithing.crafting.recipes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import com.sun.xml.internal.ws.api.server.Module;
 
+import se.rimevel.FeudalFunctions.core.util.UtilLog;
 import se.rimevel.FeudalFunctions.modules.smithing.MSmithing;
 import se.rimevel.FeudalFunctions.modules.smithing.crafting.RecipeAnvil;
 import se.rimevel.FeudalFunctions.modules.smithing.crafting.HeatedStack;
@@ -421,165 +424,105 @@ public class RecipeListAnvil
 							
 			MSmithing.items.parts_gold.getInstance().getPart(EnumHeatableType.HAMMER_HEAD),
 			new ItemStack(Items.stick)
-						
+
 		);
 		
 		//ARMORS
 		
-		//Copper
-		RecipeListAnvil.addRecipe(new ItemStack(MSmithing.items.armor_copper_chest.getInstance()),
-			
-			"i i",
-			"iii",
-			"iii",
-			
-		new HeatedStack('i', MSmithing.items.parts_copper.getInstance().getPart(EnumHeatableType.PLATE), true));
+		LinkedHashMap<Item, ItemParts> armorMap = new LinkedHashMap<Item, ItemParts>();
 		
-		RecipeListAnvil.addRecipe(new ItemStack(MSmithing.items.armor_copper_helmet.getInstance()),
-				
-			"iii",
-			"i i",
-					
-		new HeatedStack('i', MSmithing.items.parts_copper.getInstance().getPart(EnumHeatableType.PLATE), true));
-		
-		RecipeListAnvil.addRecipe(new ItemStack(MSmithing.items.armor_copper_legs.getInstance()),
-				
-			"iii",
-			"i i",
-			"i i",
-						
-		new HeatedStack('i', MSmithing.items.parts_copper.getInstance().getPart(EnumHeatableType.PLATE), true));
-		
-		RecipeListAnvil.addRecipe(new ItemStack(MSmithing.items.armor_copper_boots.getInstance()),
-				
-			"i i",
-			"i i",
-						
-		new HeatedStack('i', MSmithing.items.parts_copper.getInstance().getPart(EnumHeatableType.PLATE), true));
-		
-		//Bronze
-		RecipeListAnvil.addRecipe(new ItemStack(MSmithing.items.armor_bronze_chest.getInstance()),
-			
-			"i i",
-			"iii",
-			"iii",
-			
-		new HeatedStack('i', MSmithing.items.parts_bronze.getInstance().getPart(EnumHeatableType.PLATE), true));
-		
-		RecipeListAnvil.addRecipe(new ItemStack(MSmithing.items.armor_bronze_helmet.getInstance()),
-				
-			"iii",
-			"i i",
-					
-		new HeatedStack('i', MSmithing.items.parts_bronze.getInstance().getPart(EnumHeatableType.PLATE), true));
-		
-		RecipeListAnvil.addRecipe(new ItemStack(MSmithing.items.armor_bronze_legs.getInstance()),
-				
-			"iii",
-			"i i",
-			"i i",
-						
-		new HeatedStack('i', MSmithing.items.parts_bronze.getInstance().getPart(EnumHeatableType.PLATE), true));
-		
-		RecipeListAnvil.addRecipe(new ItemStack(MSmithing.items.armor_bronze_boots.getInstance()),
-				
-			"i i",
-			"i i",
-						
-		new HeatedStack('i', MSmithing.items.parts_bronze.getInstance().getPart(EnumHeatableType.PLATE), true));
-		
-		//Iron
-		RecipeListAnvil.addRecipe(new ItemStack(Items.iron_chestplate),
-			
-			"i i",
-			"iii",
-			"iii",
-			
-		new HeatedStack('i', MSmithing.items.parts_iron.getInstance().getPart(EnumHeatableType.PLATE), true));
+		armorMap.put(MSmithing.items.armor_copper_chest.getInstance(), MSmithing.items.parts_copper.getInstance());
+		armorMap.put(MSmithing.items.armor_copper_helmet.getInstance(), MSmithing.items.parts_copper.getInstance());
+		armorMap.put(MSmithing.items.armor_copper_legs.getInstance(), MSmithing.items.parts_copper.getInstance());
+		armorMap.put(MSmithing.items.armor_copper_boots.getInstance(), MSmithing.items.parts_copper.getInstance());
 
-		RecipeListAnvil.addRecipe(new ItemStack(Items.iron_helmet),
-				
-			"iii",
-			"i i",
+		armorMap.put(MSmithing.items.armor_bronze_chest.getInstance(), MSmithing.items.parts_bronze.getInstance());
+		armorMap.put(MSmithing.items.armor_bronze_helmet.getInstance(), MSmithing.items.parts_bronze.getInstance());
+		armorMap.put(MSmithing.items.armor_bronze_legs.getInstance(), MSmithing.items.parts_bronze.getInstance());
+		armorMap.put(MSmithing.items.armor_bronze_boots.getInstance(), MSmithing.items.parts_bronze.getInstance());
+
+		armorMap.put(Items.iron_chestplate, MSmithing.items.parts_iron.getInstance());
+		armorMap.put(Items.iron_helmet, MSmithing.items.parts_iron.getInstance());
+		armorMap.put(Items.iron_leggings, MSmithing.items.parts_iron.getInstance());
+		armorMap.put(Items.iron_boots, MSmithing.items.parts_iron.getInstance());
+
+		armorMap.put(Items.golden_chestplate, MSmithing.items.parts_gold.getInstance());
+		armorMap.put(Items.golden_helmet, MSmithing.items.parts_gold.getInstance());
+		armorMap.put(Items.golden_leggings, MSmithing.items.parts_gold.getInstance());
+		armorMap.put(Items.golden_boots, MSmithing.items.parts_gold.getInstance());
+
+		armorMap.put(MSmithing.items.armor_steel_chest.getInstance(), MSmithing.items.parts_steel.getInstance());
+		armorMap.put(MSmithing.items.armor_steel_helmet.getInstance(), MSmithing.items.parts_steel.getInstance());
+		armorMap.put(MSmithing.items.armor_steel_legs.getInstance(), MSmithing.items.parts_steel.getInstance());
+		armorMap.put(MSmithing.items.armor_steel_boots.getInstance(), MSmithing.items.parts_steel.getInstance());
+		
+		int armorType = 0;
+		
+		for (Entry<Item, ItemParts> entry : armorMap.entrySet())
+		{
+			if(armorType == 0)
+			{
+				CraftingManager.getInstance().addRecipe(
+						
+				new ItemStack(entry.getKey()),
+							
+				"i i",
+				"iii",
+				"iii",
 					
-		new HeatedStack('i', MSmithing.items.parts_iron.getInstance().getPart(EnumHeatableType.PLATE), true));
-		
-		RecipeListAnvil.addRecipe(new ItemStack(Items.iron_leggings),
+				'i', entry.getValue().getPart(EnumHeatableType.PLATE));
 				
-			"iii",
-			"i i",
-			"i i",
-						
-		new HeatedStack('i', MSmithing.items.parts_iron.getInstance().getPart(EnumHeatableType.PLATE), true));
-		
-		RecipeListAnvil.addRecipe(new ItemStack(Items.iron_boots),
-				
-			"i i",
-			"i i",
-						
-		new HeatedStack('i', MSmithing.items.parts_iron.getInstance().getPart(EnumHeatableType.PLATE), true));
-		
-		//Gold
-		RecipeListAnvil.addRecipe(new ItemStack(Items.golden_chestplate),
+				UtilLog.info("!0: " + entry.getKey().getUnlocalizedName());
+			}
 			
-			"i i",
-			"iii",
-			"iii",
-			
-		new HeatedStack('i', MSmithing.items.parts_gold.getInstance().getPart(EnumHeatableType.PLATE), true));
-		
-		RecipeListAnvil.addRecipe(new ItemStack(Items.golden_chestplate),
-				
-			"iii",
-			"i i",
+			if(armorType == 1)
+			{
+				CraftingManager.getInstance().addRecipe(
+						
+				new ItemStack(entry.getKey()),
+							
+				"iii",
+				"i i",
 					
-		new HeatedStack('i', MSmithing.items.parts_gold.getInstance().getPart(EnumHeatableType.PLATE), true));
-		
-		RecipeListAnvil.addRecipe(new ItemStack(Items.golden_chestplate),
+				'i', entry.getValue().getPart(EnumHeatableType.PLATE));
 				
-			"iii",
-			"i i",
-			"i i",
-						
-		new HeatedStack('i', MSmithing.items.parts_gold.getInstance().getPart(EnumHeatableType.PLATE), true));
-		
-		RecipeListAnvil.addRecipe(new ItemStack(Items.golden_chestplate),
-				
-			"i i",
-			"i i",
-						
-		new HeatedStack('i', MSmithing.items.parts_gold.getInstance().getPart(EnumHeatableType.PLATE), true));
-		
-		//Steel
-		RecipeListAnvil.addRecipe(new ItemStack(MSmithing.items.armor_steel_chest.getInstance()),
+				UtilLog.info("!1: " + entry.getKey().getUnlocalizedName());
+			}
 			
-			"i i",
-			"iii",
-			"iii",
-			
-		new HeatedStack('i', MSmithing.items.parts_steel.getInstance().getPart(EnumHeatableType.PLATE), true));
-		
-		RecipeListAnvil.addRecipe(new ItemStack(MSmithing.items.armor_steel_helmet.getInstance()),
-				
-			"iii",
-			"i i",
+			if(armorType == 2)
+			{
+				CraftingManager.getInstance().addRecipe(
+						
+				new ItemStack(entry.getKey()),
+							
+				"iii",
+				"i i",
+				"i i",
 					
-		new HeatedStack('i', MSmithing.items.parts_steel.getInstance().getPart(EnumHeatableType.PLATE), true));
-		
-		RecipeListAnvil.addRecipe(new ItemStack(MSmithing.items.armor_steel_legs.getInstance()),
+				'i', entry.getValue().getPart(EnumHeatableType.PLATE));
 				
-			"iii",
-			"i i",
-			"i i",
+				UtilLog.info("!2: " + entry.getKey().getUnlocalizedName());
+			}
+			
+			if(armorType == 3)
+			{
+				CraftingManager.getInstance().addRecipe(
 						
-		new HeatedStack('i', MSmithing.items.parts_steel.getInstance().getPart(EnumHeatableType.PLATE), true));
-		
-		RecipeListAnvil.addRecipe(new ItemStack(MSmithing.items.armor_steel_boots.getInstance()),
+				new ItemStack(entry.getKey()),
+							
+				"i i",
+				"i i",
+					
+				'i', entry.getValue().getPart(EnumHeatableType.PLATE));
 				
-			"i i",
-			"i i",
-						
-		new HeatedStack('i', MSmithing.items.parts_steel.getInstance().getPart(EnumHeatableType.PLATE), true));
+				UtilLog.info("!3: " + entry.getKey().getUnlocalizedName());
+				
+				armorType = 0;
+				continue;
+			}
+			
+			armorType++;
+		}
 	}
 	
 	public static RecipeAnvil addRecipe(ItemStack toBeCrafted, Object ... array)
